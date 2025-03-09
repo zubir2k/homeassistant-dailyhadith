@@ -26,6 +26,7 @@ class DailyHadithSensor(CoordinatorEntity, SensorEntity):
         super().__init__(coordinator)
         self._attr_unique_id = f"{DOMAIN}_hadith"
         self._attr_name = "Daily Hadith"
+        self._attr_icon = "mdi:book-open-page-variant"
 
     def _clean_text(self, text: str) -> str:
         """Clean HTML tags and unwanted formatting from text."""
