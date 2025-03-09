@@ -1,0 +1,11 @@
+{
+  "domain": "daily_hadith",
+  "name": "Daily Hadith",
+  "codeowners": ["@zubir2k"],
+  "config_flow": true,
+  "documentation": "https://github.com/zubir2k/homeassistant-dailyhadith",
+  "iot_class": "cloud_polling",
+  "issue_tracker": "https://github.com/zubir2k/homeassistant-dailyhadith/issues",
+  "requirements": ["aiohttp"],
+  "version": "1.0.0"
+}

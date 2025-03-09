@@ -1,0 +1,16 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Daily Hadith Setup",
+        "description": "Please enter your Sunnah.com API key",
+        "data": {
+          "api_key": "API Key"
+        }
+      }
+    },
+    "error": {
+      "invalid_api_key": "Invalid API key"
+    }
+  }
+}
