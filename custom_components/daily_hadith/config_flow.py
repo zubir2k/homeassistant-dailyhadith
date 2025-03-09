@@ -25,6 +25,16 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
         self, user_input: dict[str, Any] | None = None
     ) -> FlowResult:
         """Handle the initial step."""
+        # Check if an instance already exists
+        existing_entries = self._async_current_entries()
+        if existing_entries:
+            return self.async_abort(
+                reason="single_instance_allowed",
+                description_placeholders={
+                    "title": existing_entries[0].title,
+                },
+            )
+
         errors = {}
 
         if user_input is not None:
