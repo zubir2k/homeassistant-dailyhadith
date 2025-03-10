@@ -2,7 +2,7 @@
 
 [![hacs_badge](https://img.shields.io/badge/HACS-Integration-41BDF5.svg)](https://github.com/hacs/integration)
 ![GitHub all releases](https://img.shields.io/badge/dynamic/json?color=41BDF5&logo=home-assistant&label=Download%20Count&suffix=%20installs&cacheSeconds=15600&url=https://analytics.home-assistant.io/custom_integrations.json&query=$.daily_hadith.total)
-[![Buy](https://img.shields.io/badge/Donate-Sunnah.com-green.svg)](https://sunnah.com/donate)
+[![Buy](https://img.shields.io/badge/Support-Sunnah.com-darkgreen.svg)](https://sunnah.com/donate)
 [![GitHub Release](https://img.shields.io/github/release/zubir2k/homeassistant-dailyhadith.svg)](https://github.com/zubir2k/homeassistant-dailyhadith/releases/)
 
 Assalamu'alaikum
