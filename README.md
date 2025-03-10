@@ -17,6 +17,8 @@ May this be beneficial to all, InshaAllah
 - Information includes hadith in `arabic` and `english`
 - Full references from chapters, collection names, etc.
 
+![image](https://github.com/user-attachments/assets/9b292af6-7b90-48ba-8db7-ceda1d790d85)
+
 ## Use Cases
 - Display daily hadith on your Home Assistant dashboard
 - Automate daily hadith via notifications, or instant messaging (e.g. Family Group)
