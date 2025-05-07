@@ -34,22 +34,23 @@ class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
                     "title": existing_entries[0].title,
                 },
             )
-
         errors = {}
-
+           
         if user_input is not None:
-            valid = await self._test_api_key(user_input[CONF_API_KEY])
-            if valid:
-                return self.async_create_entry(
-                    title="Daily Hadith",
-                    data=user_input,
-                )
-            errors["base"] = "invalid_api_key"
+            key = user_input.get(CONF_API_KEY)
+            if key:
+                valid = await self._test_api_key(key)
+                if valid:
+                    return self.async_create_entry(title="Daily Hadith", data=user_input)
+                errors["base"] = "invalid_api_key"
+            else:
+                # No key provided, allow fallback
+                return self.async_create_entry(title="Daily Hadith", data={})
 
         return self.async_show_form(
             step_id="user",
             data_schema=vol.Schema({
-                vol.Required(CONF_API_KEY): str,
+                vol.Optional(CONF_API_KEY): str,
             }),
             errors=errors,
         )
