@@ -1,5 +1,8 @@
 name: Fetch Daily Hadith
 
+permissions:
+  contents: write
+  
 on:
   schedule:
     - cron: '0 * * * *' # Runs every hour
