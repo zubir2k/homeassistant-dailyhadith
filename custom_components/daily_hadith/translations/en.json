@@ -3,7 +3,7 @@
     "step": {
       "user": {
         "title": "Daily Hadith Setup",
-        "description": "Please enter your Sunnah.com API key",
+        "description": "Please enter your Sunnah.com API key. Leave empty if you have no API key and press Submit.",
         "data": {
           "api_key": "API Key"
         }
