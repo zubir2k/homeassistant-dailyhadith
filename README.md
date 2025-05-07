@@ -48,7 +48,7 @@ May this be beneficial to all, InshaAllah
 > 1. Navigate to the Home Assistant Integrations page (Settings --> Devices & Services)
 > 2. Click the `+ ADD INTEGRATION` button in the lower right-hand corner
 > 3. Search for `Daily Hadith`
-> 4. Enter your API key from Sunnah.com
+> 4. Enter your API key from Sunnah.com. Leave empty if you have no API key and press Submit.
 > 
 > Create an `Issue` at Sunnah.com Github Repository to request for the API key [here](https://github.com/sunnah-com/api/issues/new?template=request-for-api-access.md&title=Request+for+API+access%3A+%5BYour+Name%5D)
 
