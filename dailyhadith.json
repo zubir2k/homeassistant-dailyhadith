@@ -1,23 +1,23 @@
 {
     "collection": "riyadussalihin",
-    "bookNumber": "8",
-    "chapterId": "212.00",
-    "hadithNumber": "1184",
+    "bookNumber": "introduction",
+    "chapterId": "30.00",
+    "hadithNumber": "246",
     "hadith": [
         {
             "lang": "en",
-            "chapterNumber": "212",
-            "chapterTitle": "Excellence of Standing in Prayer at Night",
-            "urn": 1622280,
-            "body": "<p>Abu Sa'id and Abu Hurairah (May Allah be pleased with them) reported: The Messenger of Allah (\ufdfa) said, \"When a man awakens his wife during the night and they both perform two Rak'ah Salat together, they are recorded among the men and women who celebrate remembrance of Allah.\"<br/><br/><b>[Abu Dawud]</b>.<br/><br/></p>",
+            "chapterNumber": "30",
+            "chapterTitle": "Intercession",
+            "urn": 1602430,
+            "body": "<p>Abu Musa Al-Ash'ari (May Allah be pleased with him) reported: Whenever a needy person would come to the Prophet (\ufdfa), he would turn to those who were present and say, \"If you make intercession for him, you will be rewarded, because Allah decreed what He likes by the tongue of His Messenger\".<br/><br/><b>[Al-Bukhari and Muslim]</b>.<br/><br/></p>",
             "grades": []
         },
         {
             "lang": "ar",
-            "chapterNumber": "212",
-            "chapterTitle": "- \u0628\u0627\u0628 \u0641\u0636\u0644 \u0642\u064a\u0627\u0645 \u0627\u0644\u0644\u064a\u0644\u200f:\u200f",
-            "urn": 1711740,
-            "body": "<p>- \u0648\u0639\u0646\u0647 \u0648\u0639\u0646 \u0623\u0628\u064a \u0633\u0639\u064a\u062f \u0631\u0636\u064a \u0627\u0644\u0644\u0647 \u0639\u0646\u0647\u0645\u0627\u060c \u0642\u0627\u0644\u0627\u200f:\u200f \u0642\u0627\u0644 \u0631\u0633\u0648\u0644 \u0627\u0644\u0644\u0647 \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u200f:\u200f \u200f\"\u200f\u0625\u0630\u0627 \u0623\u064a\u0642\u0638 \u0627\u0644\u0631\u062c\u0644 \u0623\u0647\u0644\u0647 \u0645\u0646 \u0627\u0644\u0644\u064a\u0644 \u0641\u0635\u0644\u064a\u0627 \u0623\u0648 \u0635\u0644\u0649 \u0631\u0643\u0639\u062a\u064a\u0646 \u062c\u0645\u064a\u0639\u064b\u0627 \u0643\u062a\u0628 \u0641\u064a \u0627\u0644\u0630\u0627\u0643\u0631\u064a\u0646 \u0648\u0627\u0644\u0630\u0627\u0643\u0631\u0627\u062a\u200f\"\u200f \u200f(\u200f\u200f(\u200f\u0631\u0648\u0627\u0647 \u0623\u0628\u0648 \u062f\u0627\u0648\u062f \u0628\u0625\u0633\u0646\u0627\u062f \u0635\u062d\u064a\u062d\u200f)\u200f\u200f)\u200f\u200f.\u200f</p>",
+            "chapterNumber": "30",
+            "chapterTitle": "- \u0628\u0627\u0628 \u0627\u0644\u0634\u0641\u0627\u0639\u0629",
+            "urn": 1702450,
+            "body": "<p>- \u0648\u0639\u0646 \u0623\u0628\u064a \u0645\u0648\u0633\u0649 \u0627\u0644\u0623\u0634\u0639\u0631\u064a \u0631\u0636\u064a \u0627\u0644\u0644\u0647 \u0639\u0646\u0647 \u0642\u0627\u0644\u200f:\u200f \u0643\u0627\u0646 \u0627\u0644\u0646\u0628\u064a \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u0625\u0630\u0627 \u0623\u062a\u0627\u0647 \u0637\u0627\u0644\u0628 \u062d\u0627\u062c\u0629 \u0623\u0642\u0628\u0644 \u0639\u0644\u0649 \u062c\u0644\u0633\u0627\u0626\u0647 \u0641\u0642\u0627\u0644\u200f:\u200f \u200f:\u200f\u0627\u0634\u0641\u0639\u0648\u0627 \u062a\u0624\u062c\u0631\u0648\u0627 \u0648\u064a\u0642\u0636\u064a \u0627\u0644\u0644\u0647 \u0639\u0644\u0649 \u0644\u0633\u0627\u0646 \u0646\u0628\u064a\u0647 \u0645\u0627 \u0623\u062d\u0628\u200f\"\u200f \u200f(\u200f\u200f(\u200f\u0645\u062a\u0641\u0642 \u0639\u0644\u064a\u0647\u200f)\u200f\u200f)\u200f\u200f.\u200f <a href=\"javascript:opencomment('\u200f\u0648\u0641\u064a \u0631\u0648\u0627\u064a\u0629\u200f:\u200f \u200f \u200f\u0645\u0627 \u0634\u0627\u0621 \u200f')\">(16)</a></p>",
             "grades": []
         }
     ]
