@@ -1,23 +1,23 @@
 {
     "collection": "riyadussalihin",
-    "bookNumber": "18",
-    "chapterId": "370.00",
-    "hadithNumber": "1820",
+    "bookNumber": "introduction",
+    "chapterId": "36.00",
+    "hadithNumber": "293",
     "hadith": [
         {
             "lang": "en",
-            "chapterNumber": "370",
-            "chapterTitle": "Ahadith about Dajjal and Portents of the Hour",
-            "urn": 1616100,
-            "body": "<p>Abu Hurairah (May Allah be pleased with him) said: The Messenger of Allah(\ufdfa) said, \"The Last Hour will not come until the Muslims fight against the Jews, until a Jew will hide himself behind a stone or a tree, and the stone or the tree will say: 'O Muslim, there is a Jew behind me. Come and kill him,' but Al-Gharqad tree will not say so, for it is the tree of the Jews.\"<br/><br/><b>[Al-Bukhari and Muslim]</b>.<br/><br/></p>",
+            "chapterNumber": "36",
+            "chapterTitle": "Sustentation of the Members of the Family",
+            "urn": 1602900,
+            "body": "<p>Abu Mas'ud Al-Badri (May Allah be pleased with him) reported: The Prophet (\ufdfa) said, \"When someone spends on his family seeking his reward for it from Allah, it is counted as a charity from him\".<br/><br/><b>[Al-Bukhari and Muslim]</b>.<br/><br/></p>",
             "grades": []
         },
         {
             "lang": "ar",
-            "chapterNumber": "370",
-            "chapterTitle": "\u0628\u0627\u0628 \u0623\u062d\u0627\u062f\u064a\u062b \u0627\u0644\u062f\u062c\u0627\u0644 \u0648\u0623\u0634\u0631\u0627\u0637 \u0627\u0644\u0633\u0627\u0639\u0629 \u0648\u063a\u064a\u0631\u0647\u0627",
-            "urn": 1718090,
-            "body": "<p>- \u0648\u0639\u0646 \u0623\u0628\u064a \u0647\u0631\u064a\u0631\u0629 \u0631\u0636\u064a \u0627\u0644\u0644\u0647 \u0639\u0646\u0647 \u0623\u0646 \u0631\u0633\u0648\u0644 \u0627\u0644\u0644\u0647 \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u0642\u0627\u0644\u200f:\u200f \u200f\"\u200f \u0644\u0627 \u062a\u0642\u0648\u0645 \u0627\u0644\u0633\u0627\u0639\u0629 \u062d\u062a\u0649 \u064a\u0642\u0627\u062a\u0644 \u0627\u0644\u0645\u0633\u0644\u0645\u0648\u0646 \u0627\u0644\u064a\u0647\u0648\u062f\u060c \u062d\u062a\u0649 \u064a\u062e\u062a\u0628\u064a\u0621 \u0627\u0644\u064a\u0647\u0648\u062f\u064a \u0645\u0646 \u0648\u0631\u0627\u0621 \u0627\u0644\u062d\u062c\u0631 \u0648\u0627\u0644\u0634\u062c\u0631\u060c \u0641\u064a\u0642\u0648\u0644 \u0627\u0644\u062d\u062c\u0631 \u0648\u0627\u0644\u0634\u062c\u0631\u200f:\u200f \u064a\u0627 \u0645\u0633\u0644\u0645 \u0647\u0630\u0627 \u064a\u0647\u0648\u062f\u064a \u062e\u0644\u0641\u0649 \u062a\u0639\u0627\u0644\u0649 \u0641\u0627\u0642\u062a\u0644\u0647\u060c \u0625\u0644\u0627 \u0627\u0644\u063a\u0631\u0642\u062f \u0641\u0625\u0646\u0647 \u0645\u0646 \u0634\u062c\u0631 \u0627\u0644\u064a\u0647\u0648\u062f\u200f\"\u200f \u200f(\u200f\u200f(\u200f\u0645\u062a\u0641\u0642 \u0639\u0644\u064a\u0647\u200f)\u200f\u200f)\u200f\u200f.\u200f</p>",
+            "chapterNumber": "36",
+            "chapterTitle": "- \u0628\u0627\u0628 \u0627\u0644\u0646\u0641\u0642\u0629 \u0639\u0644\u0649 \u0627\u0644\u0639\u064a\u0627\u0644",
+            "urn": 1702920,
+            "body": "<p>- \u0648\u0639\u0646 \u0623\u0628\u064a \u0645\u0633\u0639\u0648\u062f \u0627\u0644\u0628\u062f\u0631\u064a \u0631\u0636\u064a \u0627\u0644\u0644\u0647 \u0639\u0646\u0647\u060c \u0639\u0646 \u0627\u0644\u0646\u0628\u064a \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u0642\u0627\u0644\u200f:\u200f \u200f\"\u200f \u0625\u0630\u0627 \u0623\u0646\u0641\u0642 \u0627\u0644\u0631\u062c\u0644 \u0639\u0644\u0649 \u0623\u0647\u0644\u0647 \u0646\u0641\u0642\u0629 \u064a\u062d\u062a\u0633\u0628\u0647\u0627 \u0641\u0647\u064a \u0644\u0647 \u0635\u062f\u0642\u0629\u200f\"\u200f \u200f(\u200f\u200f(\u200f\u0645\u062a\u0641\u0642 \u0639\u0644\u064a\u0647\u200f)\u200f\u200f)\u200f\u200f.\u200f</p>",
             "grades": []
         }
     ]
