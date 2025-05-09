@@ -10,22 +10,20 @@ Assalamu'alaikum
 This is a custom integration on Daily Hadith from Sunnah.com for your Home Assistant 🏠 \
 May this be beneficial to all, InshaAllah
 
-![image](https://github.com/user-attachments/assets/2d725f01-8718-46d8-bf79-043b1dbbbfec)
-
-## Features
+## 🚩 Features
 - Daily random hadith which will refresh midnight.
 - Information includes hadith in `arabic` and `english`
 - Full references from chapters, collection names, etc.
 
 ![image](https://github.com/user-attachments/assets/9b292af6-7b90-48ba-8db7-ceda1d790d85)
 
-## Use Cases
+## 🎯 Use Cases
 - Display daily hadith on your Home Assistant dashboard
 - Automate daily hadith via notifications, or instant messaging (e.g. Family Group)
 
 ![wasap](https://github.com/user-attachments/assets/72477c1c-a3b4-469a-b732-a7b2d94f3b10)
 
-## Installation
+## 🕹️ Installation
 #### With HACS
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=zubir2k&repository=homeassistant-dailyhadith&category=integration)
 
@@ -40,7 +38,7 @@ May this be beneficial to all, InshaAllah
 > [!WARNING]
 > If installing manually, in order to be alerted about new releases, you will need to subscribe to releases from this repository.
 
-## Setup
+## 📦 Setup
 [![Open your Home Assistant instance and start setting up a new integration.](https://my.home-assistant.io/badges/config_flow_start.svg)](https://my.home-assistant.io/redirect/config_flow_start/?domain=daily_hadith)
 
 > [!Tip]
@@ -52,8 +50,10 @@ May this be beneficial to all, InshaAllah
 > 
 > Create an `Issue` at Sunnah.com Github Repository to request for the API key [here](https://github.com/sunnah-com/api/issues/new?template=request-for-api-access.md&title=Request+for+API+access%3A+%5BYour+Name%5D)
 
-## Markdown Card
+## 🪄 Markdown Card
 You may use below template for your markdown card.
+
+![image](https://github.com/user-attachments/assets/2d725f01-8718-46d8-bf79-043b1dbbbfec)
 
 ```yaml
 type: markdown
@@ -66,5 +66,8 @@ content: |-
 title: 📿 Daily Hadith
 ```
 
-## Disclaimer/Credits
+## 🎖️ Credits
 Data provided by Sunnah.com. Learn [more](https://sunnah.com/about) about Sunnah.com
+
+## 📢 Join the Community
+[https://community.home-assistant.io/t/custom-integrations-daily-hadith/](https://community.home-assistant.io/t/custom-integrations-daily-hadith/)
