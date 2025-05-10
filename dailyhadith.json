@@ -1,23 +1,23 @@
 {
     "collection": "riyadussalihin",
-    "bookNumber": "introduction",
-    "chapterId": "55.00",
-    "hadithNumber": "461",
+    "bookNumber": "4",
+    "chapterId": "129.00",
+    "hadithNumber": "826",
     "hadith": [
         {
             "lang": "en",
-            "chapterNumber": "55",
-            "chapterTitle": "Excellence of Leading an Ascetic Life, and Virtues of Simple Life",
-            "urn": 1604580,
-            "body": "<p>Anas bin Malik (May Allah be pleased with him) reported: Messenger of Allah (\ufdfa) said, \"Among the inmates of Hell, a person who had led the most luxurious life in this world will be brought up on the Day of Resurrection and dipped in the Fire and will be asked: 'O son of Adam! Did you ever experience any comfort? Did you happen to get any luxury?' He will reply: 'By Allah, no, my Rubb.' And then one of the people of Jannah who had experienced extreme misery in the life of this world will be dipped in Jannah. Then he will be asked: 'O son of Adam! Did you ever experience any misery? Did you ever encounter difficulty?' He will say: \"By Allah, no my Rubb, I neither experienced misery nor passed through hardship\".<br/><br/><b>[Muslim]</b>.<br/><br/></p>",
+            "chapterNumber": "129",
+            "chapterTitle": "Etiquette of Attending company and sitting with Companions",
+            "urn": 1607860,
+            "body": "<p>Jabir bin Samurah (May Allah be pleased with them) reported: Whenever we came to the gathering of the Prophet, we would sit down at the end (of the assembly).<br/><br/><b>[Abu Dawud and At-Tirmidhi]</b>.<br/><br/></p>",
             "grades": []
         },
         {
             "lang": "ar",
-            "chapterNumber": "55",
-            "chapterTitle": "- \u0628\u0627\u0628 \u0641\u0636\u0644 \u0627\u0644\u0632\u0647\u062f \u0641\u064a \u0627\u0644\u062f\u0646\u064a\u0627 \u0648 \u0627\u0644\u062d\u062b \u0639\u0644\u0649 \u0627\u0644\u062a\u0642\u0644\u0644 \u0645\u0646\u0647\u0627 \u0648 \u0641\u0636\u0644 \u0627\u0644\u0641\u0642\u0631",
-            "urn": 1704570,
-            "body": "<p>- \u0648\u0639\u0646\u0647 \u0642\u0627\u0644\u200f:\u200f \u0642\u0627\u0644 \u0631\u0633\u0648\u0644 \u0627\u0644\u0644\u0647\u060c \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u200f:\u200f \u201c\u064a\u0624\u062a\u0649 \u0628\u0623\u0646\u0639\u0645 \u0623\u0647\u0644 \u0627\u0644\u062f\u0646\u064a\u0627 \u0645\u0646 \u0623\u0647\u0644 \u0627\u0644\u0646\u0627\u0631 \u064a\u0648\u0645 \u0627\u0644\u0642\u064a\u0627\u0645\u0629\u060c \u0641\u064a\u0635\u0628\u063a \u0641\u064a \u0627\u0644\u0646\u0627\u0631 \u0635\u0628\u063a\u0629\u060c \u062b\u0645 \u064a\u0642\u0627\u0644\u200f:\u200f \u064a\u0627 \u0627\u0628\u0646 \u0622\u062f\u0645 \u0647\u0644 \u0631\u0623\u064a\u062a \u062e\u064a\u0631\u0627\u064b \u0642\u0637\u200f\u061f\u200f \u0647\u0644 \u0645\u0631 \u0628\u0643 \u0646\u0639\u064a\u0645 \u0642\u0637\u200f\u061f\u200f \u0641\u064a\u0642\u0648\u0644\u200f:\u200f \u0644\u0627 \u0648\u0627\u0644\u0644\u0647 \u064a\u0627 \u0631\u0628\u200f.\u200f \u0648\u064a\u0624\u062a\u0649 \u0628\u0623\u0634\u062f \u0627\u0644\u0646\u0627\u0633 \u0628\u0624\u0633\u0627\u064b \u0641\u064a \u0627\u0644\u062f\u0646\u064a\u0627\u064b \u0645\u0646 \u0623\u0647\u0644 \u0627\u0644\u062c\u0646\u0629\u060c \u0641\u064a\u0635\u0628\u063a \u0635\u0628\u063a\u0629 \u0641\u064a \u0627\u0644\u062c\u0646\u0629\u060c \u0641\u064a\u0642\u0627\u0644 \u0644\u0647\u200f:\u200f \u064a\u0627 \u0627\u0628\u0646 \u0622\u062f\u0645 \u0647\u0644 \u0631\u0623\u064a\u062a \u0628\u0624\u0633\u0627\u064b \u0642\u0637\u200f\u061f\u200f \u0647\u0644 \u0645\u0631\u0628\u0643 \u0634\u062f\u0629 \u0642\u0637\u200f\u061f\u200f \u0641\u064a\u0642\u0648\u0644\u200f:\u200f \u0644\u0627\u060c \u0648\u0627\u0644\u0644\u0647\u060c \u0645\u0627 \u0645\u0631 \u0628\u0649 \u0628\u0624\u0633 \u0642\u0637\u060c \u0648\u0644\u0627 \u0631\u0623\u064a\u062a \u0634\u062f\u0629 \u0642\u0637\u200f\"\u200f \u200f(\u200f\u200f(\u200f\u0631\u0648\u0627\u0647 \u0645\u0633\u0644\u0645\u200f)\u200f\u200f)\u200f\u200f.\u200f</p>",
+            "chapterNumber": "129",
+            "chapterTitle": "- \u0628\u0627\u0628 \u0641\u064a \u0622\u062f\u0627\u0628 \u0627\u0644\u0645\u062c\u0644\u0633 \u0648\u0627\u0644\u062c\u0644\u064a\u0633",
+            "urn": 1708200,
+            "body": "<p>- \u0648\u0639\u0646 \u062c\u0627\u0628\u0631 \u0628\u0646 \u0633\u0645\u0631\u0629 \u0631\u0636\u0649 \u0627\u0644\u0644\u0647 \u0639\u0646\u0647\u0645\u0627 \u0642\u0627\u0644\u200f:\u200f \u0643\u0646\u0627 \u0625\u0630\u0627 \u0623\u062a\u064a\u0646\u0627 \u0627\u0644\u0646\u0628\u064a \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u062c\u0644\u0633 \u0623\u062d\u062f\u0646\u0627 \u062d\u064a\u062b \u064a\u0646\u062a\u0647\u064a\u200f.\u200f ((\u0631\u0648\u0627\u0647 \u0623\u0628\u0648 \u062f\u0627\u0648\u062f \u0648\u0627\u0644\u062a\u0631\u0645\u0630\u064a\u060c \u0648\u0642\u0627\u0644: \"\u062d\u062f\u064a\u062b \u062d\u0633\u0646\")). \u200f</p>",
             "grades": []
         }
     ]
