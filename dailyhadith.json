@@ -1,23 +1,23 @@
 {
     "collection": "riyadussalihin",
-    "bookNumber": "17",
-    "chapterId": "338.00",
-    "hadithNumber": "1752",
+    "bookNumber": "2",
+    "chapterId": "106.00",
+    "hadithNumber": "742",
     "hadith": [
         {
             "lang": "en",
-            "chapterNumber": "338",
-            "chapterTitle": "Prohibition of Placing the hands on the sides during As-Salat (The Prayer)",
-            "urn": 1625530,
-            "body": "<p>Abu Hurairah (May Allah be pleased with him) said: We are prohibited from placing the hand on the side during As-Salat (the prayer).<br/><br/><b>[Al-Bukhari and Muslim]</b>.<br/><br/></p>",
+            "chapterNumber": "106",
+            "chapterTitle": "What Should a Person Say or Do When He Eats and is Unsatisfied",
+            "urn": 1607234,
+            "body": "<p>Wahshi bin Harb (May Allah be pleased with him) reported: Some of the Companions of Messenger of Allah (\ufdfa) said: \"We eat but are not satisfied.\" He (\ufdfa) said, \"Perhaps you eat separately.\" The Companions replied in affirmative. He then said: \"Eat together and mention the Name of Allah over your food. It will be blessed for you.\"\n</p>\n<p>\n<b>[Abu Dawud]</b>.</p>",
             "grades": []
         },
         {
             "lang": "ar",
-            "chapterNumber": "338",
-            "chapterTitle": "- \u0628\u0627\u0628 \u0643\u0631\u0627\u0647\u0629 \u0648\u0636\u0639 \u0627\u0644\u064a\u062f \u0639\u0644\u0649 \u0627\u0644\u062e\u0627\u0635\u0631\u0629 \u0641\u064a \u0627\u0644\u0635\u0644\u0627\u0629",
-            "urn": 1717420,
-            "body": "<p>- \u0639\u0646 \u0623\u0628\u064a \u0647\u0631\u064a\u0631\u0629 \u0631\u0636\u064a \u0627\u0644\u0644\u0647 \u0639\u0646\u0647 \u0623\u0646 \u0631\u0633\u0648\u0644 \u0627\u0644\u0644\u0647 \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645\u200f:\u200f \u0646\u0647\u0649 \u0639\u0646 \u0627\u0644\u062e\u0635\u0631 \u0641\u064a \u0627\u0644\u0635\u0644\u0627\u0629\u200f.\u200f \u200f(\u200f\u200f(\u200f\u0645\u062a\u0641\u0642 \u0639\u0644\u064a\u0647\u200f)\u200f\u200f)\u200f\u200f.\u200f</p>",
+            "chapterNumber": "106",
+            "chapterTitle": "- \u0628\u0627\u0628 \u0645\u0627 \u064a\u0642\u0648\u0644\u0647 \u0648\u064a\u0641\u0639\u0644\u0647 \u0645\u0646 \u064a\u0623\u0643\u0644 \u0648\u0644\u0627 \u064a\u0634\u0628\u0639",
+            "urn": 1707370,
+            "body": "<p>- \u0639\u0646 \u0648\u062d\u0634\u0649 \u0628\u0646 \u062d\u0631\u0628 \u0631\u0636\u0649 \u0627\u0644\u0644\u0647 \u0639\u0646\u0647 \u0623\u0646 \u0623\u0635\u062d\u0627\u0628 \u0631\u0633\u0648\u0644 \u0627\u0644\u0644\u0647 \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u0642\u0627\u0644\u0648\u0627\u200f:\u200f \u064a\u0627 \u0631\u0633\u0648\u0644 \u0627\u0644\u0644\u0647 \u060c \u0625\u0646\u0627 \u0646\u0623\u0643\u0644 \u0648\u0644\u0627 \u0646\u0634\u0628\u0639 \u0642\u0627\u0644\u200f:\u200f \u200f\"\u200f\u0641\u0644\u0639\u0644\u0643\u0645 \u062a\u0641\u062a\u0631\u0642\u0648\u0646\u200f\"\u200f \u0642\u0627\u0644\u0648\u0627\u200f:\u200f \u0646\u0639\u0645\u200f.\u200f \u0642\u0627\u0644\u200f:\u200f \u0641\u0627\u062c\u062a\u0645\u0639\u0648\u0627 \u0639\u0644\u0649 \u0637\u0639\u0627\u0645\u0643\u0645\u060c \u0648\u0627\u0630\u0643\u0631\u0648\u0627 \u0627\u0633\u0645 \u0627\u0644\u0644\u0647 \u060c \u064a\u0628\u0627\u0631\u0643 \u0644\u0643\u0645 \u0641\u064a\u0647\u200f\"\u200f ((\u0631\u0648\u0627\u0647 \u0623\u0628\u0648 \u062f\u0627\u0648\u062f)) \u200f\u200f\u200f</p>",
             "grades": []
         }
     ]
