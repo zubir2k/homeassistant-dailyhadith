@@ -1,23 +1,23 @@
 {
     "collection": "riyadussalihin",
-    "bookNumber": "17",
-    "chapterId": "308.00",
-    "hadithNumber": "1692",
+    "bookNumber": "8",
+    "chapterId": "212.00",
+    "hadithNumber": "1164",
     "hadith": [
         {
             "lang": "en",
-            "chapterNumber": "308",
-            "chapterTitle": "Undesirability of Riding a Camel which eats Animals' waste",
-            "urn": 1624930,
-            "body": "<p>Ibn 'Umar (May Allah be pleased with them) said: The Messenger of Allah (\ufdfa) prohibited riding a camel which eats dung, or animal or human waste.<br/><br/><b>[Abu Dawud]</b>.<br/><br/></p>",
+            "chapterNumber": "212",
+            "chapterTitle": "Excellence of Standing in Prayer at Night",
+            "urn": 1622080,
+            "body": "<p>'Abdullah bin Mas'ud (May Allah be pleased with him) reported: Mention was made before the Prophet (\ufdfa) of a man who slept throughout the night till morning. The Messenger of Allah (\ufdfa) remarked, \"He is a man in whose ears Satan urinated.\"<br/><br/><b>[Al- Bukhari and Muslim]</b>.n<br/><br/></p>",
             "grades": []
         },
         {
             "lang": "ar",
-            "chapterNumber": "308",
-            "chapterTitle": "- \u0628\u0627\u0628 \u0643\u0631\u0627\u0647\u0629 \u0631\u0643\u0648\u0628 \u0627\u0644\u062c\u0644\u0627\u0644\u0629 \u0648\u0647\u064a \u0627\u0644\u0628\u0639\u064a\u0631 \u0623\u0648 \u0627\u0644\u0646\u0627\u0642\u0629 \u0627\u0644\u062a\u064a \u062a\u0623\u0643\u0644 \u0627\u0644\u0639\u0630\u0631\u0629 \u0641\u0625\u0646 \u0623\u0643\u0644\u062a \u0639\u0644\u0641\u064b\u0627 \u0637\u0627\u0647\u0631\u064b\u0627 \u0641\u0637\u0627\u0628 \u0644\u062d\u0645\u0647\u0627 \u0632\u0627\u0644\u062a \u0627\u0644\u0643\u0631\u0627\u0647\u0629",
-            "urn": 1716820,
-            "body": "<p>- \u0639\u0646 \u0627\u0628\u0646 \u0639\u0645\u0631 \u0631\u0636\u064a \u0627\u0644\u0644\u0647 \u0639\u0646\u0647\u0645\u0627 \u0642\u0627\u0644\u200f:\u200f \u0646\u0647\u0649 \u0631\u0633\u0648\u0644 \u0627\u0644\u0644\u0647 \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u0639\u0646 \u0627\u0644\u062c\u0644\u0627\u0644\u0629 \u0641\u064a \u0627\u0644\u0625\u0628\u0644 \u0623\u0646 \u064a\u0631\u0643\u0628 \u0639\u0644\u064a\u0647\u0627\u200f.\u200f ((\u0631\u0648\u0627\u0647 \u0623\u0628\u0648 \u062f\u0627\u0648\u062f \u0628\u0625\u0633\u0646\u0627\u062f \u0635\u062d\u064a\u062d ))</p>",
+            "chapterNumber": "212",
+            "chapterTitle": "- \u0628\u0627\u0628 \u0641\u0636\u0644 \u0642\u064a\u0627\u0645 \u0627\u0644\u0644\u064a\u0644\u200f:\u200f",
+            "urn": 1711540,
+            "body": "<p>- \u0648\u0639\u0646 \u0627\u0628\u0646 \u0645\u0633\u0639\u0648\u062f \u0631\u0636\u064a \u0627\u0644\u0644\u0647 \u0639\u0646\u0647 \u060c \u0642\u0627\u0644\u200f:\u200f \u0630\u0643\u0631 \u0639\u0646\u062f \u0627\u0644\u0646\u0628\u064a\u060c \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u0631\u062c\u0644 \u0646\u0627\u0645 \u0644\u064a\u0644\u0629 \u062d\u062a\u0649 \u0623\u0635\u0628\u062d\u200f!\u200f \u0642\u0627\u0644\u200f:\u200f \u200f\"\u200f\u0630\u0627\u0643 \u0631\u062c\u0644 \u0628\u0627\u0644 \u0627\u0644\u0634\u064a\u0637\u0627\u0646 \u0641\u064a \u0623\u0630\u0646\u064a\u0647- \u0623\u0648 \u0642\u0627\u0644\u200f:\u200f \u0641\u064a \u0623\u0630\u0646\u0647-\u200f\"\u200f \u200f(\u200f\u200f(\u200f\u0645\u062a\u0641\u0642 \u0639\u0644\u064a\u0647\u200f)\u200f\u200f)\u200f \u200f.\u200f</p>",
             "grades": []
         }
     ]
