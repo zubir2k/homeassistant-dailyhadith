@@ -1,23 +1,23 @@
 {
     "collection": "riyadussalihin",
-    "bookNumber": "8",
-    "chapterId": "212.00",
-    "hadithNumber": "1173",
+    "bookNumber": "introduction",
+    "chapterId": "55.00",
+    "hadithNumber": "469",
     "hadith": [
         {
             "lang": "en",
-            "chapterNumber": "212",
-            "chapterTitle": "Excellence of Standing in Prayer at Night",
-            "urn": 1622170,
-            "body": "<p>'Aishah (May Allah be pleased with her) reported: The Prophet (\ufdfa) would sleep during the early part of night and stand in Salat during the latter part.<br/><br/><b>[Al-Bukhari and Muslim]</b>.<br/><br/></p>",
+            "chapterNumber": "55",
+            "chapterTitle": "Excellence of Leading an Ascetic Life, and Virtues of Simple Life",
+            "urn": 1604660,
+            "body": "<p>Abu Hurairah (May allah be pleased with him) reported: Messenger of Allah (\ufdfa) said: \"The world is the believer's prison and the infidel's Jannah\".<br/><br/><b>[Muslim]</b>.<br/><br/></p>",
             "grades": []
         },
         {
             "lang": "ar",
-            "chapterNumber": "212",
-            "chapterTitle": "- \u0628\u0627\u0628 \u0641\u0636\u0644 \u0642\u064a\u0627\u0645 \u0627\u0644\u0644\u064a\u0644\u200f:\u200f",
-            "urn": 1711630,
-            "body": "<p>- \u0648\u0639\u0646\u0647\u0627 \u0623\u0646 \u0627\u0644\u0646\u0628\u064a \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645\u060c \u0643\u0627\u0646 \u064a\u0646\u0627\u0645 \u0623\u0648\u0644 \u0627\u0644\u0644\u064a\u0644\u060c \u0648\u064a\u0642\u0648\u0645 \u0622\u062e\u0631\u0647 \u0641\u064a\u0635\u0644\u064a\u200f.\u200f \u200f(\u200f\u200f(\u200f\u0645\u062a\u0641\u0642 \u0639\u0644\u064a\u0647\u200f)\u200f\u200f)\u200f \u200f.\u200f</p>",
+            "chapterNumber": "55",
+            "chapterTitle": "- \u0628\u0627\u0628 \u0641\u0636\u0644 \u0627\u0644\u0632\u0647\u062f \u0641\u064a \u0627\u0644\u062f\u0646\u064a\u0627 \u0648 \u0627\u0644\u062d\u062b \u0639\u0644\u0649 \u0627\u0644\u062a\u0642\u0644\u0644 \u0645\u0646\u0647\u0627 \u0648 \u0641\u0636\u0644 \u0627\u0644\u0641\u0642\u0631",
+            "urn": 1704650,
+            "body": "<p>- \u0648\u0639\u0646\u0647 \u0642\u0627\u0644\u200f:\u200f \u0642\u0627\u0644 \u0631\u0633\u0648\u0644 \u0627\u0644\u0644\u0647 \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u200f\"\u200f\u0627\u0644\u062f\u0646\u064a\u0627 \u0633\u062c\u0646 \u0627\u0644\u0645\u0624\u0645\u0646 \u0648\u062c\u0646\u0629 \u0627\u0644\u0643\u0627\u0641\u0631\u200f\"\u200f \u200f(\u200f\u200f(\u200f\u0631\u0648\u0627\u0647 \u0645\u0633\u0644\u0645\u200f)\u200f\u200f)\u200f\u200f.\u200f</p>",
             "grades": []
         }
     ]
