@@ -1,23 +1,23 @@
 {
     "collection": "riyadussalihin",
     "bookNumber": "introduction",
-    "chapterId": "71.00",
-    "hadithNumber": "605",
+    "chapterId": "6.00",
+    "hadithNumber": "72",
     "hadith": [
         {
             "lang": "en",
-            "chapterNumber": "71",
-            "chapterTitle": "Modesty and Courtesy towards the Believers",
-            "urn": 1605990,
-            "body": "<p>Al-Aswad bin Yazid (May Allah be pleased with him) reported: 'Aishah (May Allah be pleased with her) was asked: \"What did Messenger of Allah (\ufdfa) used to do inside his house?\" She answered: \"He used to keep himself busy helping members of his family, and when it was the time for Salat (the prayer), he would get up for prayer.\"<br/><br/><b>[Al-Bukhari]</b>.<br/><br/></p>",
+            "chapterNumber": "6",
+            "chapterTitle": "Piety",
+            "urn": 1600720,
+            "body": "<p>'Adi bin Hatim At-Ta'i (May Allah be pleased with him) said: I heard the Messenger of Allah (\ufdfa) say: \"He who has taken an oath (to do something) but found something else better than that (which brings him closer to Allah), then he should do that which is better in piety (and he should expiate for the breaking of oath)\".<br/><br/><b>[Muslim]</b>.<br/><br/></p>",
             "grades": []
         },
         {
             "lang": "ar",
-            "chapterNumber": "71",
-            "chapterTitle": "- \u0628\u0627\u0628 \u0627\u0644\u062a\u0648\u0627\u0636\u0639 \u0648\u062e\u0641\u0636 \u0627\u0644\u062c\u0646\u0627\u062d \u0644\u0644\u0645\u0624\u0645\u0646\u064a\u0646",
-            "urn": 1706010,
-            "body": "<p>- \u0648\u0639\u0646 \u0627\u0644\u0623\u0633\u0648\u062f \u0628\u0646 \u064a\u0632\u064a\u062f \u0642\u0627\u0644\u200f:\u200f \u0633\u0626\u0644\u062a \u0639\u0627\u0626\u0634\u0629 \u0631\u0636\u064a \u0627\u0644\u0644\u0647 \u0639\u0646\u0647\u0627\u200f:\u200f \u0645\u0627 \u0643\u0627\u0646 \u0627\u0644\u0646\u0628\u064a \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u064a\u0635\u0646\u0639 \u0641\u0649 \u0628\u064a\u062a\u0647\u200f\u061f\u200f \u0642\u0627\u0644\u062a\u200f:\u200f \u0643\u0627\u0646 \u064a\u0643\u0648\u0646 \u0641\u0649 \u0645\u0647\u0646\u0629 \u0623\u0647\u0644\u0647 -\u064a\u0639\u0646\u0649\u200f:\u200f \u062e\u062f\u0645\u0629 \u0623\u0647\u0644\u0647- \u0641\u0625\u0630\u0627 \u062d\u0636\u0631\u062a \u0627\u0644\u0635\u0644\u0627\u0629\u060c \u062e\u0631\u062c \u0625\u0644\u0649 \u0627\u0644\u0635\u0644\u0627\u0629\u201d \u200f(\u200f\u200f(\u200f\u0631\u0648\u0627\u0647 \u0627\u0644\u0628\u062e\u0627\u0631\u064a\u200f)\u200f\u200f)\u200f\u200f.\u200f</p>",
+            "chapterNumber": "6",
+            "chapterTitle": "- \u0628\u0627\u0628 \u0627\u0644\u062a\u0642\u0648\u0649",
+            "urn": 1700720,
+            "body": "<p>- \u0627\u0644\u0631\u0627\u0628\u0639\u200f:\u200f \u0639\u0646 \u0623\u0628\u064a \u0638\u0631\u064a\u0641 \u0639\u062f\u064a \u0628\u0646 \u062d\u0627\u062a\u0645 \u0627\u0644\u0637\u0627\u0626\u064a \u0631\u0636\u064a \u0627\u0644\u0644\u0647 \u0639\u0646\u0647 \u0642\u0627\u0644\u200f:\u200f \u0633\u0645\u0639\u062a \u0631\u0633\u0648\u0644 \u0627\u0644\u0644\u0647 \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u064a\u0642\u0648\u0644\u200f:\u200f \u200f\"\u200f\u0645\u0646 \u062d\u0644\u0641 \u0639\u0644\u0649 \u064a\u0645\u064a\u0646 \u062b\u0645 \u0631\u0623\u0649 \u0623\u062a\u0642\u0649 \u0644\u0644\u0647 \u0645\u0646\u0647\u0627 \u0641\u0644\u064a\u0623\u062a \u0627\u0644\u062a\u0642\u0648\u0649\u200f\"\u200f \u200f(\u200f\u200f(\u200f\u0631\u0648\u0627\u0647 \u0645\u0633\u0644\u0645\u200f)\u200f\u200f)\u200f\u200f.\u200f</p>",
             "grades": []
         }
     ]
