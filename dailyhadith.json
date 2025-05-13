@@ -1,23 +1,23 @@
 {
     "collection": "riyadussalihin",
-    "bookNumber": "17",
-    "chapterId": "304.00",
-    "hadithNumber": "1676",
+    "bookNumber": "1",
+    "chapterId": "84.00",
+    "hadithNumber": "683",
     "hadith": [
         {
             "lang": "en",
-            "chapterNumber": "304",
-            "chapterTitle": "Forbiddance of Believing in Ill Omens",
-            "urn": 1624770,
-            "body": "<p>Buraidah (May Allah be pleased with him) said: The Prophet (\ufdfa) never took ill omens.<br/><br/><b>[Abu Dawud]</b>.<br/><br/></p>",
+            "chapterNumber": "84",
+            "chapterTitle": "Exaltation of Modesty",
+            "urn": 1606750,
+            "body": "<p>Abu Sa'id Al-Khudri (May Allah be pleased with him) reported: Messenger of Allah (\ufdfa) was even shier than a virgin behind her veil. When he saw something which he disliked, we could perceive it on his face.<br/><br/><b>[Al-Bukhari and Muslim]</b>.<br/><br/></p>",
             "grades": []
         },
         {
             "lang": "ar",
-            "chapterNumber": "304",
-            "chapterTitle": "- \u0628\u0627\u0628 \u0627\u0644\u0646\u0647\u064a \u0639\u0646 \u0627\u0644\u062a\u0637\u064a\u0631",
-            "urn": 1716660,
-            "body": "<p>- \u0648\u0639\u0646 \u0628\u0631\u064a\u062f\u0629 \u0631\u0636\u064a \u0627\u0644\u0644\u0647 \u0639\u0646\u0647 \u0623\u0646 \u0627\u0644\u0646\u0628\u064a \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u0643\u0627\u0646 \u0644\u0627 \u064a\u062a\u0637\u064a\u0631\u200f.\u200f \u200f(\u200f\u200f(\u200f\u0631\u0648\u0627\u0647 \u0623\u0628\u0648 \u062f\u0627\u0648\u062f \u0628\u0625\u0633\u0646\u0627\u062f \u0635\u062d\u064a\u062d\u200f)\u200f\u200f)\u200f</p>",
+            "chapterNumber": "84",
+            "chapterTitle": "-\u0628\u0627\u0628 \u0627\u0644\u062d\u064a\u0627\u0621 \u0648\u0641\u0636\u0644\u0647 \u0648\u0627\u0644\u062d\u062b \u0639\u0644\u0649 \u0627\u0644\u062a\u062e\u0644\u0642 \u0628\u0647",
+            "urn": 1706790,
+            "body": "<p>- \u0648\u0639\u0646 \u0623\u0628\u064a \u0633\u0639\u064a\u062f \u0627\u0644\u062e\u062f\u0631\u064a \u0631\u0636\u064a \u0627\u0644\u0644\u0647 \u0639\u0646\u0647\u060c \u0642\u0627\u0644\u200f:\u200f \u0643\u0627\u0646 \u0631\u0633\u0648\u0644 \u0627\u0644\u0644\u0647 \u0635\u0644\u0649 \u0627\u0644\u0644\u0647 \u0639\u0644\u064a\u0647 \u0648\u0633\u0644\u0645 \u0623\u0634\u062f \u062d\u064a\u0627\u0621 \u0645\u0646 \u0627\u0644\u0639\u0630\u0631\u0627\u0621 \u0641\u064a \u062e\u062f\u0631\u0647\u0627\u060c \u0641\u0625\u0630\u0627 \u0631\u0623\u0649 \u0634\u064a\u0626\u064a\u0627\u064b \u064a\u0643\u0631\u0647\u0647 \u0639\u0631\u0641\u0646\u0627\u0647 \u0641\u064a \u0648\u062c\u0647\u0647\u200f.\u200f \u200f(\u200f\u200f(\u200f\u0645\u062a\u0641\u0642 \u0639\u0644\u064a\u0647\u200f)\u200f\u200f)\u200f \u200f.\u200f</p>",
             "grades": []
         }
     ]
