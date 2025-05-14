@@ -1,7 +1,8 @@
 import requests
-import json
 import os
 import hashlib
+import json
+
 API_ENDPOINT = os.getenv("API_ENDPOINT")
 API_KEY = os.getenv("API_KEY")
 
@@ -18,16 +19,20 @@ if response.status_code != 200:
     print(f"❌ Failed to fetch API: {response.status_code} - {response.text}")
     exit(1)
 
-data = response.json()
-if "hadith" not in data or not data["hadith"]:
-    print("❌ Invalid response: missing 'hadith' key.")
+# Validate structure first
+try:
+    data = response.json()
+    if "hadith" not in data or not data["hadith"]:
+        print("❌ Invalid response: missing 'hadith' key.")
+        exit(1)
+except Exception as e:
+    print(f"❌ Failed to parse JSON: {e}")
     exit(1)
 
-# Dump the formatted JSON string
-json_string = json.dumps(data, indent=4, ensure_ascii=False)
-
-# Check if the file already exists and has the same content
+# Compare hashes
+json_string = response.text
 file_path = "dailyhadith.json"
+
 if os.path.exists(file_path):
     with open(file_path, "r", encoding="utf-8") as f:
         current = f.read()
@@ -35,7 +40,7 @@ if os.path.exists(file_path):
             print("✅ Hadith content unchanged. No update needed.")
             exit(0)
 
-# Write new content
+# Save raw response text
 with open(file_path, "w", encoding="utf-8") as f:
     f.write(json_string)
     print("✅ New hadith written to dailyhadith.json")
