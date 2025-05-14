@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from datetime import datetime, timedelta, time
 import logging
+import json
 
 import aiohttp
 import async_timeout
@@ -26,11 +27,31 @@ from .const import (
 PLATFORMS: list[Platform] = [Platform.SENSOR]
 _LOGGER = logging.getLogger(__name__)
 
+
 def get_next_midnight() -> timedelta:
     """Calculate time until next midnight."""
     now = datetime.now()
     midnight = datetime.combine(now.date() + timedelta(days=1), time(0, 0))
     return midnight - now
+
+
+def build_processed_data(source: dict) -> dict:
+    """Standardize and structure hadith data for storage."""
+    english_hadith = next((h for h in source.get("hadith", []) if h.get("lang") == "en"), {})
+    arabic_hadith = next((h for h in source.get("hadith", []) if h.get("lang") == "ar"), {})
+
+    return {
+        "collection": source.get("collection", ""),
+        "bookNumber": source.get("bookNumber", ""),
+        "chapterId": source.get("chapterId", ""),
+        "hadithNumber": source.get("hadithNumber", ""),
+        "text": english_hadith.get("body", "") if english_hadith else "",
+        "arabicText": arabic_hadith.get("body", "") if arabic_hadith else "",
+        "chapterTitle": english_hadith.get("chapterTitle", "") if english_hadith else "",
+        "chapter": english_hadith.get("chapterNumber", "") if english_hadith else "",
+        "fetch_date": datetime.now().strftime("%Y-%m-%d"),
+    }
+
 
 async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
     """Set up Daily Hadith from a config entry."""
@@ -44,41 +65,24 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         try:
             async with async_timeout.timeout(API_TIMEOUT):
                 if api_key:
-                    # Use main API with key
                     headers = {"x-api-key": api_key}
                     async with session.get(API_ENDPOINT_HADITH_RANDOM, headers=headers) as response:
                         if response.status != 200:
                             raise UpdateFailed(f"API error: {response.status}")
                         data = await response.json()
-
                         if not data or "hadith" not in data or not data["hadith"]:
                             raise UpdateFailed("Invalid data format from API")
-
-                        english_hadith = next((h for h in data["hadith"] if h["lang"] == "en"), None)
-                        arabic_hadith = next((h for h in data["hadith"] if h["lang"] == "ar"), None)
-
-                        processed_data = {
-                            "collection": data.get("collection", ""),
-                            "bookNumber": data.get("bookNumber", ""),
-                            "chapterId": data.get("chapterId", ""),
-                            "hadithNumber": data.get("hadithNumber", ""),
-                            "text": english_hadith.get("body", "") if english_hadith else "",
-                            "arabicText": arabic_hadith.get("body", "") if arabic_hadith else "",
-                            "chapterTitle": english_hadith.get("chapterTitle", "") if english_hadith else "",
-                            "chapter": english_hadith.get("chapterNumber", "") if english_hadith else "",
-                            "fetch_date": datetime.now().strftime("%Y-%m-%d"),
-                        }
+                        processed_data = build_processed_data(data)
                 else:
-                    # Fallback to GitHub
                     fallback_url = "https://raw.githubusercontent.com/zubir2k/homeassistant-dailyhadith/main/dailyhadith.json"
+                    _LOGGER.warning("Falling back to GitHub JSON data due to missing API key")
                     async with session.get(fallback_url) as response:
                         if response.status != 200:
                             raise UpdateFailed(f"GitHub fallback error: {response.status}")
-                        fallback_data = await response.json()
-                        processed_data = fallback_data.get("data", [{}])[0]
-                        processed_data["fetch_date"] = datetime.now().strftime("%Y-%m-%d")
+                        fallback_text = await response.text()
+                        fallback_data = json.loads(fallback_text)
+                        processed_data = build_processed_data(fallback_data)
 
-                # Save and return
                 storage_data = {"data": [processed_data]}
                 await store.async_save(storage_data)
                 return storage_data
@@ -91,41 +95,44 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
         _LOGGER,
         name="daily_hadith",
         update_method=async_update_data,
-        update_interval=timedelta(days=1),  # Default to 24 hours, adjusted later
+        update_interval=timedelta(days=1),
     )
 
-    # Load stored data on startup
     stored_data = await store.async_load()
     if stored_data:
         coordinator.data = stored_data
     else:
-        # Fetch immediately on first setup if no stored data
         await coordinator.async_config_entry_first_refresh()
 
-    # Schedule daily midnight updates
     @callback
     def schedule_midnight_update():
-        """Schedule the next update at midnight."""
         delay = get_next_midnight().total_seconds()
         async_call_later(hass, delay, trigger_midnight_update)
 
     @callback
     def trigger_midnight_update(_):
-        """Trigger the update and reschedule for next midnight."""
         hass.async_create_task(coordinator.async_request_refresh())
         schedule_midnight_update()
 
-    # Start the midnight schedule
     schedule_midnight_update()
 
     hass.data.setdefault(DOMAIN, {})
     hass.data[DOMAIN][entry.entry_id] = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
 
+    if not hass.services.has_service(DOMAIN, "reload"):
+        async def handle_reload_service(call):
+            _LOGGER.info("Manual hadith refresh triggered via service call")
+            for coordinator in hass.data.get(DOMAIN, {}).values():
+                await coordinator.async_request_refresh()
+    
+        hass.services.async_register(DOMAIN, "reload", handle_reload_service)
+
     return True
 
 async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Unload a config entry."""
     if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
         hass.data[DOMAIN].pop(entry.entry_id)
+        store = Store(hass, STORAGE_VERSION, STORAGE_KEY)
+        await store.async_remove()
     return unload_ok
