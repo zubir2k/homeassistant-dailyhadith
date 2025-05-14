@@ -2,11 +2,11 @@ name: Fetch Daily Hadith
 
 permissions:
   contents: write
-  
+
 on:
   schedule:
-    - cron: '0 * * * *' # Runs every hour
-  workflow_dispatch: # Allows manual trigger of the workflow
+    - cron: '0 * * * *'  # Run every hour
+  workflow_dispatch:
 
 jobs:
   fetch-hadith:
@@ -29,33 +29,18 @@ jobs:
     - name: Fetch Daily Hadith and Save Response
       env:
         API_KEY: ${{ secrets.API_KEY }}
+        API_ENDPOINT: ${{ secrets.API_ENDPOINT }}
       run: |
-        python - <<EOF
-        import requests
-        import json
-        import os
-
-        # API endpoint
-        API_ENDPOINT = "https://api.sunnah.com/v1/hadiths/random"
-        API_KEY = os.getenv("API_KEY")
-
-        headers = {
-            "x-api-key": API_KEY
-        }
-
-        response = requests.get(API_ENDPOINT, headers=headers)
-        if response.status_code == 200:
-            data = response.json()
-            with open('dailyhadith.json', 'w') as json_file:
-                json.dump(data, json_file, indent=4)
-        else:
-            print(f"Failed to fetch API: {response.status_code} - {response.text}")
-        EOF
+        python fetch_dailyhadith.py
 
     - name: Commit and Push JSON File
       run: |
-        git config --local user.name "github-actions[bot]"
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git add dailyhadith.json
-        git commit -m "Daily Hadith - $(TZ=Asia/Kuala_Lumpur date +"%d-%m-%Y %I:%M:%S %p GMT+8")"
-        git push
+        if git diff --quiet; then
+          echo "No changes detected. Skipping commit."
+        else
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git add dailyhadith.json
+          git commit -m "Daily Hadith - $(TZ=Asia/Kuala_Lumpur date +"%d-%m-%Y %I:%M:%S %p GMT+8")"
+          git push
+        fi
