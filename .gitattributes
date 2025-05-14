@@ -1,0 +1,5 @@
+fetch_daily_hadith.py export-ignore
+.github/workflows/* export-ignore
+.gitattributes export-ignore
+.gitignore export-ignore
+tests/* export-ignore
