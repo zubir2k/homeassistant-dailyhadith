@@ -8,6 +8,7 @@ from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator
 
 from .const import DOMAIN
+import re
 
 async def async_setup_entry(
     hass: HomeAssistant,
@@ -29,16 +30,16 @@ class DailyHadithSensor(CoordinatorEntity, SensorEntity):
         self._attr_icon = "mdi:book-open-page-variant"
 
     def _clean_text(self, text: str) -> str:
-        """Clean HTML tags and unwanted formatting from text."""
+        """Remove HTML tags and unnecessary formatting."""
         if not text:
             return ""
-        # Remove HTML tags
-        text = text.replace("<p>", "").replace("</p>", "")
+        # Convert paragraphs and line breaks
         text = text.replace("<br/>", "\n").replace("<br>", "\n")
-        text = text.replace("<b>", "").replace("</b>", "")
-        # Remove dash after <p> tag that appears as bullet points
-        text = text.replace("- ", "").strip()
-        return text
+        text = text.replace("<p>", "").replace("</p>", "\n\n")
+        # Remove all remaining HTML tags
+        text = re.sub(r"<[^>]+>", "", text)
+        # Remove leading bullets/dashes
+        return text.strip()
 
     @property
     def native_value(self) -> str:
