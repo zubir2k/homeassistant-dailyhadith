@@ -8,6 +8,9 @@ on:
 permissions:
   contents: write
 
+env:
+  MANIFEST_PATH: custom_components/daily_hadith/manifest.json
+
 jobs:
   fix-manifest:
     runs-on: ubuntu-latest
@@ -16,7 +19,7 @@ jobs:
     - name: Checkout the repo
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # needed for tag operations
+        fetch-depth: 0  # Required for tag manipulation
 
     - name: Extract version from tag
       id: get_version
@@ -25,19 +28,37 @@ jobs:
         CLEAN_VERSION=${TAG_VERSION#v}
         echo "version=$CLEAN_VERSION" >> "$GITHUB_OUTPUT"
 
-    - name: Update manifest.json version
+    - name: Check if version already matches
+      id: check_version
       run: |
-        echo "Updating manifest.json to version: ${{ steps.get_version.outputs.version }}"
-        jq '.version = "${{ steps.get_version.outputs.version }}"' manifest.json > tmp.$$.json && mv tmp.$$.json manifest.json
+        CURRENT_VERSION=$(jq -r '.version' "$MANIFEST_PATH")
+        TAG_VERSION="${{ steps.get_version.outputs.version }}"
+
+        echo "Current manifest version: $CURRENT_VERSION"
+        echo "Tag version: $TAG_VERSION"
+
+        if [ "$CURRENT_VERSION" = "$TAG_VERSION" ]; then
+          echo "match=true" >> "$GITHUB_OUTPUT"
+        else
+          echo "match=false" >> "$GITHUB_OUTPUT"
+        fi
+
+    - name: Update manifest.json version
+      if: steps.check_version.outputs.match == 'false'
+      run: |
+        echo "Updating $MANIFEST_PATH to version: ${{ steps.get_version.outputs.version }}"
+        jq '.version = "${{ steps.get_version.outputs.version }}"' "$MANIFEST_PATH" > tmp.$$.json && mv tmp.$$.json "$MANIFEST_PATH"
 
     - name: Commit the version update
+      if: steps.check_version.outputs.match == 'false'
       run: |
         git config --local user.name "github-actions[bot]"
         git config --local user.email "github-actions[bot]@users.noreply.github.com"
-        git add manifest.json
+        git add "$MANIFEST_PATH"
         git commit -m "Update manifest.json to release version ${{ steps.get_version.outputs.version }}"
 
     - name: Force update the release tag
+      if: steps.check_version.outputs.match == 'false'
       run: |
         TAG_NAME=${GITHUB_REF##*/}
         git tag -f $TAG_NAME
