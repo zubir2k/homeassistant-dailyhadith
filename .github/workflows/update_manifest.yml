@@ -1,0 +1,44 @@
+name: manifest.json version on release
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-manifest:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout the repo
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0  # needed for tag operations
+
+    - name: Extract version from tag
+      id: get_version
+      run: |
+        TAG_VERSION=${GITHUB_REF##*/}
+        CLEAN_VERSION=${TAG_VERSION#v}
+        echo "version=$CLEAN_VERSION" >> "$GITHUB_OUTPUT"
+
+    - name: Update manifest.json version
+      run: |
+        echo "Updating manifest.json to version: ${{ steps.get_version.outputs.version }}"
+        jq '.version = "${{ steps.get_version.outputs.version }}"' manifest.json > tmp.$$.json && mv tmp.$$.json manifest.json
+
+    - name: Commit the version update
+      run: |
+        git config --local user.name "github-actions[bot]"
+        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git add manifest.json
+        git commit -m "Update manifest.json to release version ${{ steps.get_version.outputs.version }}"
+
+    - name: Force update the release tag
+      run: |
+        TAG_NAME=${GITHUB_REF##*/}
+        git tag -f $TAG_NAME
+        git push origin --force tag $TAG_NAME
