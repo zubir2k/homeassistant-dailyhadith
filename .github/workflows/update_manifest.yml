@@ -1,9 +1,13 @@
-name: Version Update manifest.json
+name: Fix manifest.json version on release
 
 on:
   release:
     types: [created]
   workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag to fix (e.g. v1.0.x)'
+        required: true
 
 permissions:
   contents: write
@@ -19,23 +23,24 @@ jobs:
     - name: Checkout the repo
       uses: actions/checkout@v3
       with:
-        fetch-depth: 0  # Required for tag manipulation
+        fetch-depth: 0  # Required to move tags
 
-    - name: Extract version from tag
+    - name: Get tag version
       id: get_version
       run: |
-        TAG_VERSION=${GITHUB_REF##*/}
-        CLEAN_VERSION=${TAG_VERSION#v}
-        echo "version=$CLEAN_VERSION" >> "$GITHUB_OUTPUT"
+        TAG="${{ github.event.release.tag_name || github.event.inputs.tag }}"
+        CLEAN="${TAG#v}"
+        echo "tag=$TAG" >> "$GITHUB_OUTPUT"
+        echo "version=$CLEAN" >> "$GITHUB_OUTPUT"
 
-    - name: Check if version already matches
+    - name: Check if manifest version matches tag
       id: check_version
       run: |
         CURRENT_VERSION=$(jq -r '.version' "$MANIFEST_PATH")
         TAG_VERSION="${{ steps.get_version.outputs.version }}"
 
-        echo "Current manifest version: $CURRENT_VERSION"
-        echo "Tag version: $TAG_VERSION"
+        echo "Current: $CURRENT_VERSION"
+        echo "Expected: $TAG_VERSION"
 
         if [ "$CURRENT_VERSION" = "$TAG_VERSION" ]; then
           echo "match=true" >> "$GITHUB_OUTPUT"
@@ -46,20 +51,20 @@ jobs:
     - name: Update manifest.json version
       if: steps.check_version.outputs.match == 'false'
       run: |
-        echo "Updating $MANIFEST_PATH to version: ${{ steps.get_version.outputs.version }}"
-        jq '.version = "${{ steps.get_version.outputs.version }}"' "$MANIFEST_PATH" > tmp.$$.json && mv tmp.$$.json "$MANIFEST_PATH"
+        jq '.version = "${{ steps.get_version.outputs.version }}"' "$MANIFEST_PATH" > tmp.json && mv tmp.json "$MANIFEST_PATH"
+        echo "Updated manifest.json to version ${{ steps.get_version.outputs.version }}"
 
-    - name: Commit the version update
+    - name: Commit the update
       if: steps.check_version.outputs.match == 'false'
       run: |
-        git config --local user.name "github-actions[bot]"
-        git config --local user.email "github-actions[bot]@users.noreply.github.com"
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
         git add "$MANIFEST_PATH"
-        git commit -m "Update manifest.json to release version ${{ steps.get_version.outputs.version }}"
+        git commit -m "Updated manifest.json to version ${{ steps.get_version.outputs.version }}"
 
-    - name: Force update the release tag
+    - name: Force update the tag to the fixed commit
       if: steps.check_version.outputs.match == 'false'
       run: |
-        TAG_NAME=${GITHUB_REF##*/}
-        git tag -f $TAG_NAME
-        git push origin --force tag $TAG_NAME
+        git tag -f "${{ steps.get_version.outputs.tag }}"
+        git push origin --force tag "${{ steps.get_version.outputs.tag }}"
+        echo "✅ Tag updated to match manifest.json"
