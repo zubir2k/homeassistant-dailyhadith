@@ -1,4 +1,4 @@
-name: manifest.json version on release
+name: Version Update manifest.json
 
 on:
   release:
