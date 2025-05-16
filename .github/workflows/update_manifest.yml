@@ -1,4 +1,4 @@
-name: Fix manifest.json version on release
+name: Version Update manifest.json
 
 on:
   release:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Release tag to fix (e.g. v1.0.x)'
+        description: 'Please enter release tag to update (e.g. v1.0.x)'
         required: true
 
 permissions:
