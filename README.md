@@ -1,5 +1,7 @@
 ![image](https://github.com/user-attachments/assets/f6d5f329-07a5-460b-82e2-6ded4a6b9012)
 
+![GitHub Repo stars](https://img.shields.io/github/stars/zubir2k/homeassistant-dailyhadith?style=social)
+[![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg)](https://github.com/hacs/default)
 [![hacs_badge](https://img.shields.io/badge/HACS-Integration-41BDF5.svg)](https://github.com/hacs/integration)
 ![GitHub all releases](https://img.shields.io/badge/dynamic/json?color=41BDF5&logo=home-assistant&label=Download%20Count&suffix=%20installs&cacheSeconds=15600&url=https://analytics.home-assistant.io/custom_integrations.json&query=$.daily_hadith.total)
 [![Buy](https://img.shields.io/badge/Support-Sunnah.com-darkgreen.svg)](https://sunnah.com/donate)
@@ -70,4 +72,5 @@ title: 📿 Daily Hadith
 Data provided by Sunnah.com. Learn [more](https://sunnah.com/about) about Sunnah.com
 
 ## 📢 Join the Community
-[https://community.home-assistant.io/t/custom-integrations-daily-hadith/](https://community.home-assistant.io/t/custom-integrations-daily-hadith/)
+[Home Assistant Official Community](https://community.home-assistant.io/t/custom-integrations-daily-hadith/) \
+[Home Assistant Malaysia](https://www.facebook.com/groups/homeassistantmalaysia)
