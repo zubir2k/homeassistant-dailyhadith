@@ -1,0 +1,19 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Configuração do Daily Hadith",
+        "description": "Por favor, insira a sua chave de API do Sunnah.com. Deixe em branco se não tiver uma chave de API e prima Submeter.",
+        "data": {
+          "api_key": "Chave de API"
+        }
+      }
+    }
+  },
+  "error": {
+    "invalid_api_key": "Chave de API inválida"
+  },
+  "abort": {
+    "single_instance_allowed": "Apenas é permitida uma instância do Daily Hadith. Já existe uma instância configurada."
+  }
+}
