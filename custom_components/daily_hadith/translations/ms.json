@@ -1,0 +1,19 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Setup Hadis Harian",
+        "description": "Sila masukkan kekunci API Sunnah.com anda dan tekan Hantar. Biarkan ruang ini kosong sekiranya anda tidak mempunyai kekunci API.",
+        "data": {
+          "api_key": "Kekunci API"
+        }
+      }
+    },
+    "error": {
+      "invalid_api_key": "Kekunci API tidak sah"
+    },
+    "abort": {
+      "single_instance_allowed": "Hanya satu entiti Hadis Harian dibenarkan. Entiti tersebut telah dikonfigurasikan."
+    }
+  }
+}
