@@ -2,6 +2,7 @@ name: Fetch Daily Hadith
 
 permissions:
   contents: write
+  actions: none
 
 on:
   schedule:
