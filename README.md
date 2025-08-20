@@ -12,6 +12,17 @@ Assalamu'alaikum
 This is a custom integration on Daily Hadith from Sunnah.com for your Home Assistant 🏠 \
 May this be beneficial to all, InshaAllah
 
+## 🚨 Notice: Daily Hadith Updates Temporarily Disabled
+
+As of August 2025, the automated workflow responsible for daily updates of fallback hadith content (`dailyhadith.json`) has been disabled.  
+This is to prevent excessive update notifications in HACS and reduce repository activity.
+
+- **Users with an API key:** You will continue to receive daily hadith updates directly from Sunnah.com.
+- **Users without an API key:** The fallback content will remain static until a new update strategy is announced.
+
+We are reviewing the best approach for future content updates.  
+Thank you for your understanding and patience!
+
 ## 🚩 Features
 - Daily random hadith which will refresh midnight.
 - Information includes hadith in `arabic` and `english`
