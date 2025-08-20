@@ -74,7 +74,7 @@ async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
                             raise UpdateFailed("Invalid data format from API")
                         processed_data = build_processed_data(data)
                 else:
-                    fallback_url = "https://raw.githubusercontent.com/zubir2k/homeassistant-dailyhadith/main/dailyhadith.json"
+                    fallback_url = "https://raw.githubusercontent.com/zubir2k/dailyhadith-fetcher/refs/heads/main/dailyhadith.json"
                     _LOGGER.warning("Falling back to GitHub JSON data due to missing API key")
                     async with session.get(fallback_url) as response:
                         if response.status != 200:
