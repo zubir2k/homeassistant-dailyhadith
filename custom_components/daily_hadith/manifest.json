@@ -1,6 +1,7 @@
 {
   "domain": "daily_hadith",
   "name": "Daily Hadith",
+  "categories": ["productivity_information"],
   "codeowners": ["@zubir2k"],
   "config_flow": true,
   "documentation": "https://github.com/zubir2k/homeassistant-dailyhadith",
