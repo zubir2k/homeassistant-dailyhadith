@@ -2,18 +2,88 @@
   "config": {
     "step": {
       "user": {
-        "title": "Setup Hadis Harian",
-        "description": "Sila masukkan kekunci API Sunnah.com anda dan tekan Hantar. Biarkan ruang ini kosong sekiranya anda tidak mempunyai kekunci API.",
+        "title": "Tetapan Hadis Harian",
+        "description": "Masukkan kekunci API Sunnah.com anda untuk hadis rawak baharu setiap hari. Biarkan kosong untuk menggunakan hadis hari ini yang dikongsi.",
         "data": {
           "api_key": "Kekunci API"
+        },
+        "data_description": {
+          "api_key": "Pilihan. Mohon daripada Sunnah.com di GitHub (sunnah-com/api)."
+        }
+      },
+      "reconfigure": {
+        "title": "Tukar kekunci API",
+        "description": "Tambah, tukar atau kosongkan kekunci API Sunnah.com anda. Biarkan kosong untuk menggunakan hadis hari ini yang dikongsi.",
+        "data": {
+          "api_key": "Kekunci API"
+        },
+        "data_description": {
+          "api_key": "Pilihan. Mohon daripada Sunnah.com di GitHub (sunnah-com/api)."
         }
       }
     },
     "error": {
-      "invalid_api_key": "Kekunci API tidak sah"
+      "invalid_api_key": "Kekunci API tidak sah",
+      "cannot_connect": "Tidak dapat menghubungi Sunnah.com. Cuba lagi kemudian, atau biarkan kekunci kosong."
     },
     "abort": {
-      "single_instance_allowed": "Hanya satu entiti Hadis Harian dibenarkan. Entiti tersebut telah dikonfigurasikan."
+      "single_instance_allowed": "Hadis Harian telah dikonfigurasikan. Hanya satu sahaja dibenarkan.",
+      "reconfigure_successful": "Kekunci API dikemas kini."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hadith": {
+        "name": "Hadis Harian",
+        "state_attributes": {
+          "title": {
+            "name": "Tajuk"
+          },
+          "title_ms": {
+            "name": "Tajuk (Bahasa Melayu)"
+          },
+          "text": {
+            "name": "Bahasa Inggeris"
+          },
+          "arabic": {
+            "name": "Bahasa Arab"
+          },
+          "malay": {
+            "name": "Bahasa Melayu"
+          },
+          "collection": {
+            "name": "Kitab"
+          },
+          "chapter": {
+            "name": "Bab"
+          },
+          "hadith_number": {
+            "name": "Nombor hadis"
+          },
+          "book_number": {
+            "name": "Nombor kitab"
+          },
+          "reference": {
+            "name": "Rujukan"
+          },
+          "url": {
+            "name": "Pautan"
+          },
+          "source": {
+            "name": "Sumber",
+            "state": {
+              "sunnah_api": "API Sunnah.com",
+              "github_fallback": "Suapan hadis hari ini"
+            }
+          }
+        }
+      }
+    }
+  },
+  "services": {
+    "reload": {
+      "name": "Dapatkan hadis baharu",
+      "description": "Mendapatkan hadis baharu sekarang. Dengan kekunci API anda mendapat hadis rawak baharu; tanpanya, hadis hari ini yang terkini."
     }
   }
 }

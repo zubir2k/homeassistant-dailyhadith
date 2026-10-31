@@ -1,0 +1,14 @@
+{
+  "entity": {
+    "sensor": {
+      "hadith": {
+        "default": "mdi:book-open-page-variant"
+      }
+    }
+  },
+  "services": {
+    "reload": {
+      "service": "mdi:book-refresh"
+    }
+  }
+}

@@ -1,72 +1,99 @@
-"""Platform for Daily Hadith sensor integration."""
+"""Sensor platform for the Daily Hadith integration."""
+
 from __future__ import annotations
 
-from homeassistant.components.sensor import SensorEntity
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.update_coordinator import CoordinatorEntity, DataUpdateCoordinator
-
-from .const import DOMAIN
 import re
+from datetime import date
+from typing import Any
+
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.device_registry import DeviceEntryType, DeviceInfo
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.update_coordinator import CoordinatorEntity
+
+from .const import DOMAIN, SUNNAH_URL
+from .coordinator import DailyHadithConfigEntry, DailyHadithCoordinator
+
+PARALLEL_UPDATES = 0
+
+_TAG_RE = re.compile(r"<[^>]+>")
+_MULTI_NL_RE = re.compile(r"\n{3,}")
+
+
+def clean_text(text: str | None) -> str:
+    """Turn Sunnah.com HTML into plain text with paragraph breaks."""
+    if not text:
+        return ""
+    text = re.sub(r"<br\s*/?>", "\n", text, flags=re.IGNORECASE)
+    text = text.replace("<p>", "").replace("</p>", "\n\n")
+    text = _TAG_RE.sub("", text)
+    text = text.replace("&nbsp;", " ").replace("&amp;", "&")
+    return _MULTI_NL_RE.sub("\n\n", text).strip()
+
 
 async def async_setup_entry(
     hass: HomeAssistant,
-    entry: ConfigEntry,
+    entry: DailyHadithConfigEntry,
     async_add_entities: AddEntitiesCallback,
 ) -> None:
-    """Set up Daily Hadith sensor based on a config entry."""
-    coordinator = hass.data[DOMAIN][entry.entry_id]
-    async_add_entities([DailyHadithSensor(coordinator)])
+    """Set up the Daily Hadith sensor."""
+    async_add_entities([DailyHadithSensor(entry.runtime_data)])
 
-class DailyHadithSensor(CoordinatorEntity, SensorEntity):
-    """Representation of a Daily Hadith sensor."""
 
-    def __init__(self, coordinator: DataUpdateCoordinator) -> None:
+class DailyHadithSensor(CoordinatorEntity[DailyHadithCoordinator], SensorEntity):
+    """Today's hadith. State is the date it was fetched; content is in attributes."""
+
+    _attr_has_entity_name = True
+    _attr_name = None  # entity takes the device name -> sensor.daily_hadith
+    _attr_translation_key = "hadith"
+    _attr_device_class = SensorDeviceClass.DATE
+    # The hadith text can be long; keep it out of the recorder database.
+    _unrecorded_attributes = frozenset({"text", "arabic", "malay"})
+
+    def __init__(self, coordinator: DailyHadithCoordinator) -> None:
         """Initialize the sensor."""
         super().__init__(coordinator)
+        # Unchanged from 1.0.x so existing entity IDs and automations keep working.
         self._attr_unique_id = f"{DOMAIN}_hadith"
-        self._attr_name = "Daily Hadith"
-        self._attr_icon = "mdi:book-open-page-variant"
-
-    def _clean_text(self, text: str) -> str:
-        """Remove HTML tags and unnecessary formatting."""
-        if not text:
-            return ""
-        # Convert paragraphs and line breaks
-        text = text.replace("<br/>", "\n").replace("<br>", "\n")
-        text = text.replace("<p>", "").replace("</p>", "\n\n")
-        # Remove all remaining HTML tags
-        text = re.sub(r"<[^>]+>", "", text)
-        # Remove leading bullets/dashes
-        return text.strip()
+        self._attr_device_info = DeviceInfo(
+            identifiers={(DOMAIN, coordinator.config_entry.entry_id)},
+            name="Daily Hadith",
+            manufacturer="Sunnah.com",
+            model="Hadith of the day",
+            entry_type=DeviceEntryType.SERVICE,
+            configuration_url=SUNNAH_URL,
+        )
 
     @property
-    def native_value(self) -> str:
-        """Return the state of the sensor."""
-        if not self.coordinator.data or not isinstance(self.coordinator.data, dict):
-            return "No data"
-        hadith_data = self.coordinator.data.get("data", [{}])[0]
-        return hadith_data.get("fetch_date", "Unknown")
+    def native_value(self) -> date | None:
+        """Return the date the current hadith was fetched."""
+        raw = self.coordinator.hadith.get("fetch_date")
+        try:
+            return date.fromisoformat(raw) if raw else None
+        except ValueError:
+            return None
 
     @property
-    def extra_state_attributes(self) -> dict:
-        """Return the state attributes."""
-        if not self.coordinator.data or not isinstance(self.coordinator.data, dict):
+    def extra_state_attributes(self) -> dict[str, Any]:
+        """Return the hadith content."""
+        h = self.coordinator.hadith
+        if not h:
             return {}
-        hadith_data = self.coordinator.data.get("data", [{}])[0]
-
-        english_text = self._clean_text(hadith_data.get("text", ""))
-        arabic_text = self._clean_text(hadith_data.get("arabicText", ""))
-        collection = hadith_data.get("collection", "").title()
-
+        slug = h.get("collection", "")
+        collection = slug.title()
+        number = h.get("hadithNumber", "")
         return {
-            "title": hadith_data.get("chapterTitle", ""),
-            "text": english_text,
-            "arabic": arabic_text,
+            "title": h.get("chapterTitle", ""),
+            "title_ms": h.get("chapterTitleMs", ""),
+            "text": clean_text(h.get("text")),
+            "arabic": clean_text(h.get("arabicText")),
+            "malay": clean_text(h.get("malayText")),
             "collection": collection,
-            "chapter": hadith_data.get("chapter", ""),
-            "hadith_number": hadith_data.get("hadithNumber", ""),
-            "book_number": hadith_data.get("bookNumber", ""),
-            "reference": f"{collection} #{hadith_data.get('hadithNumber', '')}",
+            "chapter": h.get("chapter", ""),
+            "hadith_number": number,
+            "book_number": h.get("bookNumber", ""),
+            "reference": f"{collection} #{number}",
+            "url": f"{SUNNAH_URL}/{slug}:{number}" if slug and number else SUNNAH_URL,
+            "source": h.get("source", ""),
         }

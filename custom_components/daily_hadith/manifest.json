@@ -1,12 +1,22 @@
 {
   "domain": "daily_hadith",
   "name": "Daily Hadith",
-  "categories": ["productivity_information"],
-  "codeowners": ["@zubir2k"],
+  "categories": [
+    "productivity_information"
+  ],
+  "codeowners": [
+    "@zubir2k"
+  ],
   "config_flow": true,
+  "dependencies": [
+    "http",
+    "frontend"
+  ],
   "documentation": "https://github.com/zubir2k/homeassistant-dailyhadith",
+  "integration_type": "service",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/zubir2k/homeassistant-dailyhadith/issues",
-  "requirements": ["aiohttp"],
-  "version": "1.0.6"
+  "requirements": [],
+  "single_config_entry": true,
+  "version": "1.2.0"
 }

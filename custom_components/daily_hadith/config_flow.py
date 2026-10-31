@@ -1,72 +1,102 @@
-"""Config flow for Daily Hadith integration."""
+"""Config flow for the Daily Hadith integration."""
+
 from __future__ import annotations
 
+import asyncio
 import logging
 from typing import Any
 
 import aiohttp
 import voluptuous as vol
-
-from homeassistant import config_entries
+from homeassistant.config_entries import ConfigFlow, ConfigFlowResult
 from homeassistant.const import CONF_API_KEY
-from homeassistant.data_entry_flow import FlowResult
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.selector import (
+    TextSelector,
+    TextSelectorConfig,
+    TextSelectorType,
+)
 
-from .const import DOMAIN, API_ENDPOINT_HADITH_RANDOM, API_TIMEOUT
+from .const import API_ENDPOINT_HADITH_RANDOM, API_TIMEOUT, DOMAIN
 
 _LOGGER = logging.getLogger(__name__)
 
-class ConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
+TITLE = "Daily Hadith"
+
+
+def _schema(default: str = "") -> vol.Schema:
+    return vol.Schema(
+        {
+            vol.Optional(
+                CONF_API_KEY, description={"suggested_value": default}
+            ): TextSelector(TextSelectorConfig(type=TextSelectorType.PASSWORD)),
+        }
+    )
+
+
+class DailyHadithConfigFlow(ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Daily Hadith."""
 
     VERSION = 1
 
+    async def _validate(self, user_input: dict[str, Any]) -> tuple[dict[str, Any], dict[str, str]]:
+        """Return (data to store, errors). An empty key means use the fallback feed."""
+        key = (user_input.get(CONF_API_KEY) or "").strip()
+        if not key:
+            return {}, {}
+        error = await self._test_api_key(key)
+        if error:
+            return {}, {"base": error}
+        return {CONF_API_KEY: key}, {}
+
     async def async_step_user(
         self, user_input: dict[str, Any] | None = None
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle the initial step."""
-        # Check if an instance already exists
-        existing_entries = self._async_current_entries()
-        if existing_entries:
-            return self.async_abort(
-                reason="single_instance_allowed",
-                description_placeholders={
-                    "title": existing_entries[0].title,
-                },
-            )
-        errors = {}
-           
+        # Also enforced by "single_config_entry" in manifest.json.
+        if self._async_current_entries():
+            return self.async_abort(reason="single_instance_allowed")
+
+        errors: dict[str, str] = {}
         if user_input is not None:
-            key = user_input.get(CONF_API_KEY)
-            if key:
-                valid = await self._test_api_key(key)
-                if valid:
-                    return self.async_create_entry(title="Daily Hadith", data=user_input)
-                errors["base"] = "invalid_api_key"
-            else:
-                # No key provided, allow fallback
-                return self.async_create_entry(title="Daily Hadith", data={})
+            data, errors = await self._validate(user_input)
+            if not errors:
+                return self.async_create_entry(title=TITLE, data=data)
 
         return self.async_show_form(
-            step_id="user",
-            data_schema=vol.Schema({
-                vol.Optional(CONF_API_KEY): str,
-            }),
+            step_id="user", data_schema=_schema(), errors=errors
+        )
+
+    async def async_step_reconfigure(
+        self, user_input: dict[str, Any] | None = None
+    ) -> ConfigFlowResult:
+        """Add, change or remove the Sunnah.com API key."""
+        entry = self._get_reconfigure_entry()
+        errors: dict[str, str] = {}
+        if user_input is not None:
+            data, errors = await self._validate(user_input)
+            if not errors:
+                return self.async_update_reload_and_abort(entry, data=data)
+
+        return self.async_show_form(
+            step_id="reconfigure",
+            data_schema=_schema(entry.data.get(CONF_API_KEY, "")),
             errors=errors,
         )
 
-    async def _test_api_key(self, api_key: str) -> bool:
-        """Test if the API key is valid."""
+    async def _test_api_key(self, api_key: str) -> str | None:
+        """Return an error key, or None when the API key works."""
         session = async_get_clientsession(self.hass)
-        headers = {"x-api-key": api_key}
-
         try:
-            async with session.get(
-                API_ENDPOINT_HADITH_RANDOM,
-                headers=headers,
-                timeout=aiohttp.ClientTimeout(total=API_TIMEOUT),
-            ) as response:
-                return response.status == 200
-        except aiohttp.ClientError as err:
-            _LOGGER.error("API key validation failed: %s", err)
-            return False
+            async with asyncio.timeout(API_TIMEOUT):
+                async with session.get(
+                    API_ENDPOINT_HADITH_RANDOM, headers={"x-api-key": api_key}
+                ) as response:
+                    if response.status in (401, 403):
+                        return "invalid_api_key"
+                    if response.status != 200:
+                        return "cannot_connect"
+        except (TimeoutError, aiohttp.ClientError) as err:
+            _LOGGER.debug("API key validation failed: %s", err)
+            return "cannot_connect"
+        return None

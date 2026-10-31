@@ -1,138 +1,91 @@
 """The Daily Hadith integration."""
+
 from __future__ import annotations
 
-from datetime import datetime, timedelta, time
 import logging
-import json
+from datetime import datetime
 
-import aiohttp
-import async_timeout
-
-from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_API_KEY, Platform
-from homeassistant.core import HomeAssistant, callback
-from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.config_entries import ConfigEntryState
+from homeassistant.const import Platform
+from homeassistant.core import HomeAssistant, ServiceCall, callback
+from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers.event import async_track_time_change
 from homeassistant.helpers.storage import Store
-from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
-from homeassistant.helpers.event import async_call_later
+from homeassistant.helpers.typing import ConfigType
 
-from .const import (
-    DOMAIN,
-    STORAGE_VERSION,
-    STORAGE_KEY,
-    API_ENDPOINT_HADITH_RANDOM,
-    API_TIMEOUT,
-)
+from .card_registration import async_register_card, async_unregister_card
+from .const import DOMAIN, SERVICE_RELOAD, STORAGE_KEY, STORAGE_VERSION
+from .coordinator import DailyHadithConfigEntry, DailyHadithCoordinator
 
 PLATFORMS: list[Platform] = [Platform.SENSOR]
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
+
 _LOGGER = logging.getLogger(__name__)
 
 
-def get_next_midnight() -> timedelta:
-    """Calculate time until next midnight."""
-    now = datetime.now()
-    midnight = datetime.combine(now.date() + timedelta(days=1), time(0, 0))
-    return midnight - now
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Register the integration's actions once, independent of config entries."""
 
+    async def handle_reload(call: ServiceCall) -> None:
+        """Fetch a new hadith for every loaded entry."""
+        _LOGGER.info("Manual hadith refresh requested")
+        for entry in hass.config_entries.async_entries(DOMAIN):
+            if entry.state is ConfigEntryState.LOADED:
+                await entry.runtime_data.async_force_refresh()
 
-def build_processed_data(source: dict) -> dict:
-    """Standardize and structure hadith data for storage."""
-    english_hadith = next((h for h in source.get("hadith", []) if h.get("lang") == "en"), {})
-    arabic_hadith = next((h for h in source.get("hadith", []) if h.get("lang") == "ar"), {})
-
-    return {
-        "collection": source.get("collection", ""),
-        "bookNumber": source.get("bookNumber", ""),
-        "chapterId": source.get("chapterId", ""),
-        "hadithNumber": source.get("hadithNumber", ""),
-        "text": english_hadith.get("body", "") if english_hadith else "",
-        "arabicText": arabic_hadith.get("body", "") if arabic_hadith else "",
-        "chapterTitle": english_hadith.get("chapterTitle", "") if english_hadith else "",
-        "chapter": english_hadith.get("chapterNumber", "") if english_hadith else "",
-        "fetch_date": datetime.now().strftime("%Y-%m-%d"),
-    }
-
-
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up Daily Hadith from a config entry."""
-    api_key = entry.data.get(CONF_API_KEY)
-    store = Store(hass, STORAGE_VERSION, STORAGE_KEY)
-
-    async def async_update_data() -> dict:
-        """Fetch and process data from the Sunnah API or fallback to GitHub JSON."""
-        session = async_get_clientsession(hass)
-
-        try:
-            async with async_timeout.timeout(API_TIMEOUT):
-                if api_key:
-                    headers = {"x-api-key": api_key}
-                    async with session.get(API_ENDPOINT_HADITH_RANDOM, headers=headers) as response:
-                        if response.status != 200:
-                            raise UpdateFailed(f"API error: {response.status}")
-                        data = await response.json()
-                        if not data or "hadith" not in data or not data["hadith"]:
-                            raise UpdateFailed("Invalid data format from API")
-                        processed_data = build_processed_data(data)
-                else:
-                    fallback_url = "https://raw.githubusercontent.com/zubir2k/dailyhadith-fetcher/refs/heads/main/dailyhadith.json"
-                    _LOGGER.warning("Falling back to GitHub JSON data due to missing API key")
-                    async with session.get(fallback_url) as response:
-                        if response.status != 200:
-                            raise UpdateFailed(f"GitHub fallback error: {response.status}")
-                        fallback_text = await response.text()
-                        fallback_data = json.loads(fallback_text)
-                        processed_data = build_processed_data(fallback_data)
-
-                storage_data = {"data": [processed_data]}
-                await store.async_save(storage_data)
-                return storage_data
-
-        except aiohttp.ClientError as err:
-            raise UpdateFailed(f"Error fetching data: {err}") from err
-
-    coordinator = DataUpdateCoordinator(
-        hass,
-        _LOGGER,
-        name="daily_hadith",
-        update_method=async_update_data,
-        update_interval=timedelta(days=1),
-    )
-
-    stored_data = await store.async_load()
-    if stored_data:
-        coordinator.data = stored_data
-    else:
-        await coordinator.async_config_entry_first_refresh()
-
-    @callback
-    def schedule_midnight_update():
-        delay = get_next_midnight().total_seconds()
-        async_call_later(hass, delay, trigger_midnight_update)
-
-    @callback
-    def trigger_midnight_update(_):
-        hass.async_create_task(coordinator.async_request_refresh())
-        schedule_midnight_update()
-
-    schedule_midnight_update()
-
-    hass.data.setdefault(DOMAIN, {})
-    hass.data[DOMAIN][entry.entry_id] = coordinator
-    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
-
-    if not hass.services.has_service(DOMAIN, "reload"):
-        async def handle_reload_service(call):
-            _LOGGER.info("Manual hadith refresh triggered via service call")
-            for coordinator in hass.data.get(DOMAIN, {}).values():
-                await coordinator.async_request_refresh()
-    
-        hass.services.async_register(DOMAIN, "reload", handle_reload_service)
-
+    hass.services.async_register(DOMAIN, SERVICE_RELOAD, handle_reload)
+    # Serve the bundled Daily Hadith card and add it to the dashboard resources.
+    await async_register_card(hass)
     return True
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    if unload_ok := await hass.config_entries.async_unload_platforms(entry, PLATFORMS):
-        hass.data[DOMAIN].pop(entry.entry_id)
-        store = Store(hass, STORAGE_VERSION, STORAGE_KEY)
-        await store.async_remove()
-    return unload_ok
+
+async def async_setup_entry(hass: HomeAssistant, entry: DailyHadithConfigEntry) -> bool:
+    """Set up Daily Hadith from a config entry."""
+    # Re-sync the card resource: removing the integration deletes it, and
+    # async_setup does not run again when it is added back without a restart.
+    await async_register_card(hass)
+
+    coordinator = DailyHadithCoordinator(hass, entry)
+
+    has_cache = await coordinator.async_load_cached()
+    if not has_cache:
+        # Nothing cached yet: setup must succeed with real data or retry later.
+        await coordinator.async_config_entry_first_refresh()
+    elif not coordinator.is_current():
+        # Cached hadith is from an earlier day (HA was off at midnight):
+        # show it now, replace it in the background.
+        entry.async_create_background_task(
+            hass, coordinator.async_refresh(), "daily_hadith_catch_up"
+        )
+
+    if not coordinator.data:
+        raise ConfigEntryNotReady("No hadith available yet")
+
+    entry.runtime_data = coordinator
+
+    @callback
+    def _midnight(_now: datetime) -> None:
+        """Fetch the new day's hadith just after local midnight."""
+        entry.async_create_background_task(
+            hass, coordinator.async_refresh(), "daily_hadith_midnight"
+        )
+
+    # Uses HA's configured time zone and is cancelled on unload/reload.
+    entry.async_on_unload(
+        async_track_time_change(hass, _midnight, hour=0, minute=0, second=30)
+    )
+
+    await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
+    return True
+
+
+async def async_unload_entry(hass: HomeAssistant, entry: DailyHadithConfigEntry) -> bool:
+    """Unload a config entry. The cache is kept so a reload doesn't refetch."""
+    return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
+
+
+async def async_remove_entry(hass: HomeAssistant, entry: DailyHadithConfigEntry) -> None:
+    """Delete the cached hadith and the card resource when the integration is removed."""
+    await async_unregister_card(hass)
+    await Store(hass, STORAGE_VERSION, STORAGE_KEY).async_remove()

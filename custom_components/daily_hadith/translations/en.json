@@ -2,18 +2,88 @@
   "config": {
     "step": {
       "user": {
-        "title": "Daily Hadith Setup",
-        "description": "Please enter your Sunnah.com API key. Leave empty if you have no API key and press Submit.",
+        "title": "Daily Hadith setup",
+        "description": "Enter your Sunnah.com API key for a fresh random hadith every day. Leave it empty to use the shared hadith of the day instead.",
         "data": {
-          "api_key": "API Key"
+          "api_key": "API key"
+        },
+        "data_description": {
+          "api_key": "Optional. Request one from Sunnah.com on GitHub (sunnah-com/api)."
+        }
+      },
+      "reconfigure": {
+        "title": "Change API key",
+        "description": "Add, change or clear your Sunnah.com API key. Leave it empty to use the shared hadith of the day.",
+        "data": {
+          "api_key": "API key"
+        },
+        "data_description": {
+          "api_key": "Optional. Request one from Sunnah.com on GitHub (sunnah-com/api)."
         }
       }
     },
     "error": {
-      "invalid_api_key": "Invalid API key"
+      "invalid_api_key": "Invalid API key",
+      "cannot_connect": "Could not reach Sunnah.com. Try again later, or leave the key empty."
     },
     "abort": {
-      "single_instance_allowed": "Only one instance of Daily Hadith is allowed. An existing instance is already configured."
+      "single_instance_allowed": "Daily Hadith is already configured. Only one instance is allowed.",
+      "reconfigure_successful": "API key updated."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "hadith": {
+        "name": "Daily Hadith",
+        "state_attributes": {
+          "title": {
+            "name": "Title"
+          },
+          "title_ms": {
+            "name": "Title (Malay)"
+          },
+          "text": {
+            "name": "English"
+          },
+          "arabic": {
+            "name": "Arabic"
+          },
+          "malay": {
+            "name": "Malay"
+          },
+          "collection": {
+            "name": "Collection"
+          },
+          "chapter": {
+            "name": "Chapter"
+          },
+          "hadith_number": {
+            "name": "Hadith number"
+          },
+          "book_number": {
+            "name": "Book number"
+          },
+          "reference": {
+            "name": "Reference"
+          },
+          "url": {
+            "name": "Link"
+          },
+          "source": {
+            "name": "Source",
+            "state": {
+              "sunnah_api": "Sunnah.com API",
+              "github_fallback": "Hadith of the day feed"
+            }
+          }
+        }
+      }
+    }
+  },
+  "services": {
+    "reload": {
+      "name": "Fetch new hadith",
+      "description": "Fetches a new hadith now. With an API key you get a new random hadith; without one, the latest hadith of the day."
     }
   }
 }

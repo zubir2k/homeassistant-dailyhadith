@@ -12,14 +12,28 @@ Assalamu'alaikum
 This is a custom integration on Daily Hadith from Sunnah.com for your Home Assistant 🏠 \
 _May this benefit you, inshaAllah._
 
-## 🛠️ What's New: Fallback Hadith Source Updated
+## 🛠️ What's New in 1.2.0
 
-- For users **without an API key**, daily hadith content is now updated independently.
-- No action required—fallback data is always up to date!
+- Bundled **Daily Hadith card** with an EN / BM switch (see below).
+- Malay translation (`malay`, `title_ms`) for API-key users too.
+
+## 🛠️ What's New in 1.1.0 (ready for Home Assistant 2026.11)
+
+- Fixed loading on current Home Assistant: the `async_timeout` package is no longer shipped with HA.
+- The hadith now changes at midnight in **your Home Assistant time zone**, and catches up after a restart if HA was off at midnight.
+- If the Sunnah.com API is down, the integration falls back to the shared hadith of the day instead of going unavailable.
+- Add, change or remove your API key any time: **Settings → Devices & services → Daily Hadith → ⋮ → Reconfigure**.
+- New attributes: `url` (link to the hadith on Sunnah.com) and `source`.
+- Daily Hadith now shows as a service device, with English and Malay translations for the setup, sensor and action.
+- New `malay` and `title_ms` attributes (Bahasa Melayu). The fallback feed already includes them; with an API key the integration translates through the hadith translator worker.
+- Long `text`, `arabic` and `malay` attributes are no longer stored in the recorder database.
+- Your existing `sensor.daily_hadith` entity and automations keep working. Minimum Home Assistant version is now 2024.11.
 
 ## 🚩 Features
-- Daily random hadith which will refresh midnight.
-- Information includes hadith in `arabic` and `english`
+- Daily random hadith which refreshes at midnight (your Home Assistant time zone).
+- Works without an API key using the shared hadith of the day.
+- `daily_hadith.reload` action to fetch a new hadith on demand.
+- Information includes hadith in `arabic`, `english` and `malay`
 - Full references from chapters, collection names, etc.
 
 ![image](https://github.com/user-attachments/assets/9b292af6-7b90-48ba-8db7-ceda1d790d85)
@@ -57,21 +71,39 @@ _May this benefit you, inshaAllah._
 > 
 > Create an `Issue` at Sunnah.com Github Repository to request for the API key [here](https://github.com/sunnah-com/api/issues/new?template=request-for-api-access.md&title=Request+for+API+access%3A+%5BYour+Name%5D)
 
-## 🪄 Markdown Card
-You may use below template for your markdown card.
+## 🃏 Daily Hadith Card (new in 1.2.0)
 
-![image](https://github.com/user-attachments/assets/2d725f01-8718-46d8-bf79-043b1dbbbfec)
+The integration ships its own dashboard card. No extra download and no resource to add: it is registered automatically (for YAML-managed dashboards the script is injected instead).
+
+![Daily Hadith card](docs/card.png)
+
+- Arabic text in the bundled Amiri font, right to left
+- **EN / BM switch** on the card. Your choice is remembered per browser. BM is greyed out on days the Malay translation is missing
+- Long hadith fold behind **Show more**
+- Reference chip that opens the hadith on Sunnah.com
+- Copy button and a refresh button (calls `daily_hadith.reload`)
+- Follows your Home Assistant theme, light and dark
+- Visual editor: find **Daily Hadith** in the card picker
 
 ```yaml
-type: markdown
-content: |-
-  ### {{ state_attr("sensor.daily_hadith", "title") }}
-
-  {{ state_attr("sensor.daily_hadith", "arabic") }}
-
-  {{ state_attr("sensor.daily_hadith", "text") }}
-title: 📿 Daily Hadith
+type: custom:daily-hadith-card
+entity: sensor.daily_hadith   # optional
+language: auto                # auto | en | ms (starting translation)
+show_arabic: true
+show_translation: true
+show_toggle: true
+show_header: true
+show_reference: true
+show_refresh: true
+show_copy: true
+collapse: true
 ```
+
+## 🗑️ Removal
+
+1. Remove any Daily Hadith cards from your dashboards.
+2. Go to **Settings → Devices & services → Daily Hadith → ⋮ → Delete**. This also deletes the cached hadith and the card's dashboard resource.
+3. Uninstall it from HACS / the Marketplace (or delete `custom_components/daily_hadith`) and restart Home Assistant.
 
 ## 🎖️ Credits
 Data provided by Sunnah.com. Learn [more](https://sunnah.com/about) about Sunnah.com
