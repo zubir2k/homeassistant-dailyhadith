@@ -84,6 +84,18 @@
     "reload": {
       "name": "Dapatkan hadis baharu",
       "description": "Mendapatkan hadis baharu sekarang. Dengan kekunci API anda mendapat hadis rawak baharu; tanpanya, hadis hari ini yang terkini."
+    },
+    "refresh": {
+      "name": "Dapatkan hadis baharu",
+      "description": "Mendapatkan hadis baharu sekarang. Dengan kekunci API anda mendapat hadis rawak baharu; tanpanya, hadis hari ini yang terkini."
+    }
+  },
+  "exceptions": {
+    "cannot_fetch": {
+      "message": "Tidak dapat memuat turun hadis: {error}"
+    },
+    "refresh_failed": {
+      "message": "Gagal mengemas kini Hadis Harian: {error}"
     }
   }
 }

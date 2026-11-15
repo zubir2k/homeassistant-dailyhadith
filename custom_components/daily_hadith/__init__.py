@@ -8,14 +8,14 @@ from datetime import datetime
 from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall, callback
-from homeassistant.exceptions import ConfigEntryNotReady
+from homeassistant.exceptions import ConfigEntryNotReady, HomeAssistantError
 from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.event import async_track_time_change
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers.typing import ConfigType
 
 from .card_registration import async_register_card, async_unregister_card
-from .const import DOMAIN, SERVICE_RELOAD, STORAGE_KEY, STORAGE_VERSION
+from .const import DOMAIN, SERVICE_REFRESH, SERVICE_RELOAD, STORAGE_KEY, STORAGE_VERSION
 from .coordinator import DailyHadithConfigEntry, DailyHadithCoordinator
 
 PLATFORMS: list[Platform] = [Platform.SENSOR]
@@ -32,9 +32,17 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
         _LOGGER.info("Manual hadith refresh requested")
         for entry in hass.config_entries.async_entries(DOMAIN):
             if entry.state is ConfigEntryState.LOADED:
-                await entry.runtime_data.async_force_refresh()
+                try:
+                    await entry.runtime_data.async_force_refresh()
+                except Exception as err:
+                    raise HomeAssistantError(
+                        translation_domain=DOMAIN,
+                        translation_key="refresh_failed",
+                        translation_placeholders={"error": str(err)},
+                    ) from err
 
     hass.services.async_register(DOMAIN, SERVICE_RELOAD, handle_reload)
+    hass.services.async_register(DOMAIN, SERVICE_REFRESH, handle_reload)
     # Serve the bundled Daily Hadith card and add it to the dashboard resources.
     await async_register_card(hass)
     return True

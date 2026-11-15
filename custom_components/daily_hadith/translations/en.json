@@ -84,6 +84,18 @@
     "reload": {
       "name": "Fetch new hadith",
       "description": "Fetches a new hadith now. With an API key you get a new random hadith; without one, the latest hadith of the day."
+    },
+    "refresh": {
+      "name": "Fetch new hadith",
+      "description": "Fetches a new hadith now. With an API key you get a new random hadith; without one, the latest hadith of the day."
+    }
+  },
+  "exceptions": {
+    "cannot_fetch": {
+      "message": "Could not fetch a hadith: {error}"
+    },
+    "refresh_failed": {
+      "message": "Failed to refresh Daily Hadith: {error}"
     }
   }
 }

@@ -26,6 +26,7 @@ TRANSLATION_TIMEOUT: Final = 30  # seconds per request
 SUNNAH_URL: Final = "https://sunnah.com"
 
 SERVICE_RELOAD: Final = "reload"
+SERVICE_REFRESH: Final = "refresh"
 
 SOURCE_API: Final = "sunnah_api"
 SOURCE_FALLBACK: Final = "github_fallback"

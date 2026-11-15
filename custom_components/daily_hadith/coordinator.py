@@ -134,7 +134,13 @@ class DailyHadithCoordinator(DataUpdateCoordinator[dict[str, Any]]):
                 errors.append(f"fallback feed: {err}")
 
         if record is None:
-            raise UpdateFailed("Could not fetch a hadith: " + "; ".join(errors))
+            err_msg = "; ".join(errors) if errors else "No hadith sources reachable"
+            raise UpdateFailed(
+                err_msg,
+                translation_domain=DOMAIN,
+                translation_key="cannot_fetch",
+                translation_placeholders={"error": err_msg},
+            )
 
         data = {"data": [record]}
         await self.store.async_save(data)

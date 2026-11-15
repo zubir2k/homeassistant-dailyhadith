@@ -66,6 +66,15 @@ class DailyHadithSensor(CoordinatorEntity[DailyHadithCoordinator], SensorEntity)
         )
 
     @property
+    def available(self) -> bool:
+        """Return True if entity is available.
+
+        Keep sensor available as long as cached data exists, even if a background
+        refresh failed.
+        """
+        return super().available or bool(self.coordinator.data)
+
+    @property
     def native_value(self) -> date | None:
         """Return the date the current hadith was fetched."""
         raw = self.coordinator.hadith.get("fetch_date")

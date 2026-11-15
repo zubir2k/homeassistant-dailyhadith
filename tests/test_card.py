@@ -151,8 +151,10 @@ async def test_unregister_removes_only_ours(hass: HomeAssistant) -> None:
         [{"id": "a", "url": f"{card.CARD_URL}?v=1"}, {"id": "c", "url": "/hacsfiles/other.js"}]
     )
     _lovelace(hass, res)
+    hass.data[card._REGISTERED_KEY] = True
     await card.async_unregister_card(hass)
     res.async_delete_item.assert_awaited_once_with("a")
+    assert card._REGISTERED_KEY not in hass.data
 
 
 async def test_unregister_is_quiet(hass: HomeAssistant) -> None:

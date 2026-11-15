@@ -1,6 +1,14 @@
 """Fixtures for Daily Hadith tests."""
 from unittest.mock import patch
 
+try:
+    import pycares
+
+    if hasattr(pycares, "_shutdown_manager"):
+        pycares._shutdown_manager.start()
+except Exception:
+    pass
+
 import pytest
 
 

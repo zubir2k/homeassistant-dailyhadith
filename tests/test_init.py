@@ -12,6 +12,7 @@ from homeassistant.config_entries import ConfigEntryState
 from homeassistant.const import CONF_API_KEY
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
+from homeassistant.exceptions import HomeAssistantError
 from homeassistant.helpers import entity_registry as er
 from homeassistant.util import dt as dt_util
 from pytest_homeassistant_custom_component.common import (
@@ -23,8 +24,10 @@ from custom_components.daily_hadith.const import (
     API_ENDPOINT_HADITH_RANDOM,
     DOMAIN,
     FALLBACK_URL,
+    SERVICE_REFRESH,
     STORAGE_KEY,
 )
+from custom_components.daily_hadith.diagnostics import async_get_config_entry_diagnostics
 from custom_components.daily_hadith.sensor import clean_text
 
 PAYLOAD = json.loads((Path(__file__).parents[1] / "dailyhadith.json").read_text())
@@ -233,3 +236,45 @@ async def test_old_cache_without_malay_refetched(hass: HomeAssistant, aioclient_
     await _setup(hass)
     await hass.async_block_till_done(wait_background_tasks=True)
     assert aioclient_mock.call_count == 1
+
+
+async def test_refresh_service_forces_fetch(hass: HomeAssistant, aioclient_mock) -> None:
+    aioclient_mock.get(API_ENDPOINT_HADITH_RANDOM, json=_other("1"))
+    await _setup(hass, {CONF_API_KEY: "k"})
+    aioclient_mock.clear_requests()
+    aioclient_mock.get(API_ENDPOINT_HADITH_RANDOM, json=_other("3"))
+    await hass.services.async_call(DOMAIN, SERVICE_REFRESH, blocking=True)
+    assert hass.states.get("sensor.daily_hadith").attributes["hadith_number"] == "3"
+
+
+async def test_reload_service_failure_raises_homeassistanterror(hass: HomeAssistant, aioclient_mock) -> None:
+    aioclient_mock.get(API_ENDPOINT_HADITH_RANDOM, json=_other("1"))
+    entry = await _setup(hass, {CONF_API_KEY: "k"})
+    with patch.object(entry.runtime_data, "async_force_refresh", side_effect=RuntimeError("API failure")):
+        with pytest.raises(HomeAssistantError, match="Failed to refresh Daily Hadith: API failure"):
+            await hass.services.async_call(DOMAIN, "reload", blocking=True)
+
+
+async def test_diagnostics(hass: HomeAssistant, aioclient_mock) -> None:
+    aioclient_mock.get(API_ENDPOINT_HADITH_RANDOM, json=_other("1"))
+    entry = await _setup(hass, {CONF_API_KEY: "secret_sunnah_key"})
+    diag = await async_get_config_entry_diagnostics(hass, entry)
+    assert diag["entry"]["data"][CONF_API_KEY] == "**REDACTED**"
+    assert diag["coordinator"]["has_api_key"] is True
+    assert diag["coordinator"]["hadith"]["hadithNumber"] == "1"
+
+
+async def test_sensor_available_with_cached_data_when_update_fails(hass: HomeAssistant, aioclient_mock) -> None:
+    aioclient_mock.get(FALLBACK_URL, text=json.dumps(PAYLOAD))
+    entry = await _setup(hass)
+    assert hass.states.get("sensor.daily_hadith").state == dt_util.now().date().isoformat()
+    aioclient_mock.clear_requests()
+    aioclient_mock.get(FALLBACK_URL, status=500)
+    await entry.runtime_data.async_force_refresh()
+    await hass.async_block_till_done()
+    assert entry.runtime_data.last_update_success is False
+    st = hass.states.get("sensor.daily_hadith")
+    assert st is not None
+    assert st.state != "unavailable"
+    assert st.attributes["hadith_number"] == "1437"
+

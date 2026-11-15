@@ -34,6 +34,7 @@ CARD_FILENAME = "daily-hadith-card.js"
 CARD_URL_BASE = f"/{DOMAIN}_static"
 CARD_URL = f"{CARD_URL_BASE}/{CARD_FILENAME}"
 
+_REGISTERED_KEY = f"{DOMAIN}_card_registered"
 _URL_KEY = f"{DOMAIN}_card_url"
 _INJECTED_KEY = f"{DOMAIN}_card_injected"
 _LOCK_KEY = f"{DOMAIN}_card_lock"
@@ -98,9 +99,11 @@ async def async_register_card(hass: HomeAssistant) -> None:
     removes it and adding the integration back (without a restart) must restore it.
     """
     card_path = Path(__file__).parent / "frontend" / CARD_FILENAME
-    if not card_path.is_file():
+    if not await hass.async_add_executor_job(card_path.is_file):
         _LOGGER.warning("Daily Hadith card not found at %s", card_path)
         return
+
+    hass.data[_REGISTERED_KEY] = True
 
     lock = hass.data.setdefault(_LOCK_KEY, asyncio.Lock())
     async with lock:
@@ -139,6 +142,7 @@ async def async_register_card(hass: HomeAssistant) -> None:
 
 async def async_unregister_card(hass: HomeAssistant) -> None:
     """Remove our Lovelace resource (called when the integration is removed)."""
+    hass.data.pop(_REGISTERED_KEY, None)
     mode, resources = _lovelace_resources(hass)
     if mode != "storage" or resources is None:
         return

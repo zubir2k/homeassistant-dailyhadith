@@ -1,1 +1,15 @@
 reload:
+  name: Fetch new hadith
+  description: Fetches a new hadith now. With an API key you get a new random hadith; without one, the latest hadith of the day.
+  target:
+    entity:
+      integration: daily_hadith
+      domain: sensor
+
+refresh:
+  name: Fetch new hadith
+  description: Fetches a new hadith now. With an API key you get a new random hadith; without one, the latest hadith of the day.
+  target:
+    entity:
+      integration: daily_hadith
+      domain: sensor
