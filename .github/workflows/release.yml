@@ -1,0 +1,31 @@
+name: Release
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  zip:
+    name: Attach integration zip
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout the repository
+        uses: actions/checkout@v4
+
+      - name: Build zip
+        working-directory: custom_components/daily_hadith
+        run: zip -r "$GITHUB_WORKSPACE/daily_hadith.zip" . -x '__pycache__/*' '*/__pycache__/*' '*.pyc'
+
+      - name: Upload zip to the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.event.release.tag_name }}
+        run: |
+          if [ -n "$TAG" ]; then
+            gh release upload "$TAG" daily_hadith.zip --clobber --repo "$GITHUB_REPOSITORY"
+          fi
