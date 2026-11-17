@@ -30,11 +30,11 @@ See [RELEASE_NOTES.md](RELEASE_NOTES.md) for full version history and release no
 ![wasap](https://github.com/user-attachments/assets/72477c1c-a3b4-469a-b732-a7b2d94f3b10)
 
 ## 🕹️ Installation
-#### With HACS
+#### With Marketplace/HACS
 [![Open your Home Assistant instance and open a repository inside the Home Assistant Community Store.](https://my.home-assistant.io/badges/hacs_repository.svg)](https://my.home-assistant.io/redirect/hacs_repository/?owner=zubir2k&repository=homeassistant-dailyhadith&category=integration)
 
 > [!Tip]
-> If you are unable to use the button above, manually search for Daily Hadith in HACS.
+> If you are unable to use the button above, manually search for Daily Hadith in Marketplace/HACS.
 
 #### Manual
 1. Copy the `daily_hadith` directory from `custom_components` in this repository and place inside your Home Assistant's `custom_components` directory.
