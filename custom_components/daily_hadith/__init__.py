@@ -10,12 +10,20 @@ from homeassistant.const import Platform
 from homeassistant.core import HomeAssistant, ServiceCall, callback
 from homeassistant.exceptions import ConfigEntryNotReady, HomeAssistantError
 from homeassistant.helpers import config_validation as cv
+from homeassistant.helpers import issue_registry as ir
 from homeassistant.helpers.event import async_track_time_change
 from homeassistant.helpers.storage import Store
 from homeassistant.helpers.typing import ConfigType
 
 from .card_registration import async_register_card, async_unregister_card
-from .const import DOMAIN, SERVICE_REFRESH, SERVICE_RELOAD, STORAGE_KEY, STORAGE_VERSION
+from .const import (
+    DOMAIN,
+    ISSUE_TRANSLATOR_NEEDED,
+    SERVICE_REFRESH,
+    SERVICE_RELOAD,
+    STORAGE_KEY,
+    STORAGE_VERSION,
+)
 from .coordinator import DailyHadithConfigEntry, DailyHadithCoordinator
 
 PLATFORMS: list[Platform] = [Platform.SENSOR]
@@ -71,6 +79,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: DailyHadithConfigEntry) 
         raise ConfigEntryNotReady("No hadith available yet")
 
     entry.runtime_data = coordinator
+    entry.async_on_unload(coordinator.async_cancel_retry)
+    if has_cache and coordinator.is_current():
+        # Options may have changed the language: translate the cached hadith.
+        coordinator.async_refresh_translation()
+    entry.async_on_unload(entry.add_update_listener(_async_options_updated))
 
     @callback
     def _midnight(_now: datetime) -> None:
@@ -88,6 +101,11 @@ async def async_setup_entry(hass: HomeAssistant, entry: DailyHadithConfigEntry) 
     return True
 
 
+async def _async_options_updated(hass: HomeAssistant, entry: DailyHadithConfigEntry) -> None:
+    """Reload when the translation options change."""
+    await hass.config_entries.async_reload(entry.entry_id)
+
+
 async def async_unload_entry(hass: HomeAssistant, entry: DailyHadithConfigEntry) -> bool:
     """Unload a config entry. The cache is kept so a reload doesn't refetch."""
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
@@ -96,4 +114,5 @@ async def async_unload_entry(hass: HomeAssistant, entry: DailyHadithConfigEntry)
 async def async_remove_entry(hass: HomeAssistant, entry: DailyHadithConfigEntry) -> None:
     """Delete the cached hadith and the card resource when the integration is removed."""
     await async_unregister_card(hass)
+    ir.async_delete_issue(hass, DOMAIN, ISSUE_TRANSLATOR_NEEDED)
     await Store(hass, STORAGE_VERSION, STORAGE_KEY).async_remove()

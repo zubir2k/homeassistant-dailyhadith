@@ -12,6 +12,15 @@ Assalamu'alaikum
 This is a custom integration on Daily Hadith from Sunnah.com for your Home Assistant 🏠 \
 _May this benefit you, inshaAllah._
 
+## 🛠️ What's New in 1.3.0
+
+- **Translate into your own language** with your own AI: Home Assistant **AI Task / Assist** (ChatGPT, Claude, Google Gemini, Ollama…) or any **OpenAI-compatible API** (OpenAI, Ollama, OpenRouter, Groq, LM Studio, Cloudflare Workers AI…). See [Translation](#-translation).
+- Bahasa Melayu stays free and needs no setup when you use the shared feed (no API key).
+- The card's switch now shows your language (EN / BM / ID / TR…), and the heading, chapter title and date follow the language you pick.
+- New attributes: `translation`, `title_translation`, `translation_language`, `translation_source`.
+- New diagnostic sensor `sensor.daily_hadith_translation`: translation status (not needed, translating, translated, failed, needs a translator), with the last error, duration and next retry in its attributes.
+- API-key users: Malay now comes from your own translator (eliminating any external Cloudflare Worker reliance). If none is set, Home Assistant shows a repair notice and the card stays in English.
+
 ## 🛠️ What's New in 1.2.0
 
 - Bundled **Daily Hadith card** with an EN / BM switch (see below).
@@ -71,14 +80,37 @@ _May this benefit you, inshaAllah._
 > 
 > Create an `Issue` at Sunnah.com Github Repository to request for the API key [here](https://github.com/sunnah-com/api/issues/new?template=request-for-api-access.md&title=Request+for+API+access%3A+%5BYour+Name%5D)
 
-## 🃏 Daily Hadith Card (new in 1.2.0)
+## 🌐 Translation
+
+Arabic and English are always included. For a third language, open **Settings → Devices & services → Daily Hadith → Configure** and pick:
+
+1. **Language**: the language shown on the card's second button. Bahasa Melayu is the default. Not in the list? Type its code (for example `pt-BR`).
+2. **Translator**:
+   - **None**: English only, or Malay from the shared feed (when using without a Sunnah.com API key).
+   - **Home Assistant AI Task / Assist**: uses an AI integration you already have (OpenAI, Anthropic, Google Gemini, Ollama and others). Leave the entity empty to use your default AI Task or Assist agent.
+   - **OpenAI-compatible API**: a base URL, an optional API key and a model.
+
+| Service | Base URL | Model example |
+|---|---|---|
+| OpenAI | `https://api.openai.com/v1` | `gpt-4o-mini` |
+| Ollama (local) | `http://<host>:11434/v1` | `llama3.1` |
+| OpenRouter | `https://openrouter.ai/api/v1` | `openai/gpt-4o-mini` |
+| Cloudflare Workers AI | `https://api.cloudflare.com/client/v4/accounts/<account_id>/ai/v1` | `@cf/google/gemma-4-26b-a4b-it` |
+
+A short test translation runs when you save. Each hadith is translated once (body and chapter title) and kept with the day's hadith, so a reload or restart doesn't call your AI again. The hadith shows in English straight away and the translation follows when your AI answers; if it fails, it tries again 15 minutes later.
+
+> [!NOTE]
+> Translations are made by AI and are not reviewed. Smaller local models can struggle with less common languages. Check the original on Sunnah.com before relying on a translation.
+
+## 🃏 Daily Hadith Card
 
 The integration ships its own dashboard card. No extra download and no resource to add: it is registered automatically (for YAML-managed dashboards the script is injected instead).
 
 ![Daily Hadith card](docs/card.png)
 
 - Arabic text in the bundled Amiri font, right to left
-- **EN / BM switch** on the card. Your choice is remembered per browser. BM is greyed out on days the Malay translation is missing
+- **Language switch** on the card: EN and your translation language (BM, ID, TR…). Your choice is remembered per browser. The heading, chapter title and date follow the language shown. The button is greyed out until the translation is ready
+- Small "AI translation" note under translated text
 - Long hadith fold behind **Show more**
 - Reference chip that opens the hadith on Sunnah.com
 - Copy button and a refresh button (calls `daily_hadith.reload`)
@@ -88,7 +120,7 @@ The integration ships its own dashboard card. No extra download and no resource 
 ```yaml
 type: custom:daily-hadith-card
 entity: sensor.daily_hadith   # optional
-language: auto                # auto | en | ms (starting translation)
+language: auto                # auto | en | translation (starting language)
 show_arabic: true
 show_translation: true
 show_toggle: true
@@ -96,6 +128,7 @@ show_header: true
 show_reference: true
 show_refresh: true
 show_copy: true
+show_ai_note: true
 collapse: true
 ```
 

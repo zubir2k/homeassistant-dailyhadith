@@ -5,10 +5,11 @@
  *
  *   type: custom:daily-hadith-card
  *   entity: sensor.daily_hadith      # optional
- *   language: auto                   # auto | en | ms   (starting translation)
+ *   language: auto                   # auto | en | translation   (starting language)
  *   show_arabic: true
  *   show_translation: true
- *   show_toggle: true                # EN / BM switch on the card
+ *   show_toggle: true                # EN / translation switch on the card
+ *   show_ai_note: true               # small "AI translation" note under the text
  *   show_header: true
  *   show_reference: true
  *   show_refresh: true
@@ -16,7 +17,7 @@
  *   collapse: true                   # fold long hadith behind "Show more"
  */
 
-const CARD_VERSION = "1.2.0";
+const CARD_VERSION = "1.3.0";
 const CARD_TAG = "daily-hadith-card";
 const EDITOR_TAG = "daily-hadith-card-editor";
 const DEFAULT_ENTITY = "sensor.daily_hadith";
@@ -70,7 +71,8 @@ const UI = {
     open: "Open on Sunnah.com",
     unavailable: "Hadith not available yet",
     missing: "Entity not found",
-    no_ms: "Malay translation not available today",
+    no_tr: "Translation not available yet",
+    ai: "AI translation",
     hadith: "Hadith",
   },
   ms: {
@@ -83,7 +85,8 @@ const UI = {
     open: "Buka di Sunnah.com",
     unavailable: "Hadis belum tersedia",
     missing: "Entiti tidak dijumpai",
-    no_ms: "Terjemahan Bahasa Melayu tiada hari ini",
+    no_tr: "Terjemahan belum tersedia",
+    ai: "Terjemahan AI",
     hadith: "Hadis",
   },
 };
@@ -108,6 +111,24 @@ const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c]);
 
 const uiLang = (hass) => (String(hass?.locale?.language || hass?.language || "en").startsWith("ms") ? "ms" : "en");
+
+const baseLang = (code) => String(code || "").split(/[-_]/)[0].toLowerCase();
+const RTL = new Set(["ar", "fa", "he", "ur", "ps", "sd", "ug", "yi", "dv", "ku"]);
+
+/** The translation the sensor offers next to English (Malay on older versions). */
+function translationOf(a) {
+  const code = a.translation_language || "ms";
+  const base = baseLang(code);
+  const offered = base !== "en" && base !== "ar";
+  const text = a.translation || (base === "ms" ? a.malay : "") || "";
+  const title = a.title_translation || (base === "ms" ? a.title_ms : "") || "";
+  return {
+    code, base, offered, text, title,
+    has: offered && !!String(text).trim(),
+    label: base === "ms" ? "BM" : base.toUpperCase(),
+    source: a.translation_source || (base === "ms" && a.malay ? "feed" : ""),
+  };
+}
 
 /** Strip the Arabic chapter dash and normalise blank lines. */
 const tidy = (s) => String(s ?? "").replace(/^\s*-\s*/, "").replace(/\n{3,}/g, "\n\n").trim();
@@ -154,6 +175,7 @@ class DailyHadithCard extends HTMLElement {
       show_reference: true,
       show_refresh: true,
       show_copy: true,
+      show_ai_note: true,
       collapse: true,
       ...config,
     };
@@ -185,16 +207,19 @@ class DailyHadithCard extends HTMLElement {
     return `daily-hadith-card:lang:${this._config.entity}`;
   }
 
-  _startLang() {
+  _startLang(tr) {
     try {
       const saved = localStorage.getItem(this._storageKey());
-      if (saved === "en" || saved === "ms") return saved;
+      if (saved === "en") return "en";
+      if (saved === "tr" || saved === "ms") return "tr"; // "ms" from 1.2.0
     } catch (_e) {
       /* private mode */
     }
     const c = this._config.language;
-    if (c === "en" || c === "ms") return c;
-    return uiLang(this._hass);
+    if (c === "en") return "en";
+    if (c === "translation" || c === "ms") return "tr";
+    const ha = baseLang(this._hass?.locale?.language || this._hass?.language);
+    return ha === tr.base ? "tr" : "en";
   }
 
   _setLang(lang) {
@@ -248,10 +273,10 @@ class DailyHadithCard extends HTMLElement {
       const b = this.shadowRoot.querySelector(".copy");
       if (b) {
         b.innerHTML = svg(ICONS.check);
-        b.title = UI[uiLang(this._hass)].copied;
+        b.title = UI[this._chrome || "en"].copied;
         setTimeout(() => {
           b.innerHTML = svg(ICONS.copy);
-          b.title = UI[uiLang(this._hass)].copy;
+          b.title = UI[this._chrome || "en"].copy;
         }, 1500);
       }
     }
@@ -261,7 +286,7 @@ class DailyHadithCard extends HTMLElement {
   _render() {
     if (!this._config || !this._hass) return;
     const c = this._config;
-    const t = UI[uiLang(this._hass)];
+    let t = UI[uiLang(this._hass)];
     const st = this._hass.states[c.entity];
 
     if (!st) {
@@ -274,12 +299,18 @@ class DailyHadithCard extends HTMLElement {
       return;
     }
 
-    const hasMs = !!(a.malay && String(a.malay).trim());
-    if (!this._lang) this._lang = this._startLang();
-    const lang = this._lang === "ms" && hasMs ? "ms" : "en";
+    const tr = translationOf(a);
+    if (!this._lang) this._lang = this._startLang(tr);
+    const showTr = this._lang === "tr" && tr.has;
+    const lang = showTr ? tr.code : "en";
 
-    const translation = lang === "ms" ? a.malay : a.text;
-    const title = (lang === "ms" && a.title_ms) || a.title || "";
+    // The card's own words follow the language being shown (EN or BM);
+    // for other languages they follow the Home Assistant language.
+    this._chrome = showTr ? (UI[tr.base] ? tr.base : uiLang(this._hass)) : "en";
+    t = UI[this._chrome];
+
+    const translation = showTr ? tr.text : a.text;
+    const title = (showTr && tr.title) || a.title || "";
     const slug = String(a.url || "").match(/sunnah\.com\/([^:/?#]+)/)?.[1] || "";
     const collection = COLLECTIONS[slug] || a.collection || "";
     const ref = [collection, a.hadith_number].filter(Boolean).join(" · ");
@@ -287,7 +318,9 @@ class DailyHadithCard extends HTMLElement {
     let date = "";
     if (st.state && /^\d{4}-\d{2}-\d{2}$/.test(st.state)) {
       try {
-        date = new Date(`${st.state}T12:00:00`).toLocaleDateString(this._hass.locale?.language || undefined, {
+        const ha = this._hass.locale?.language || "en";
+        const locale = showTr ? tr.code : baseLang(ha) === "en" ? ha : "en";
+        date = new Date(`${st.state}T12:00:00`).toLocaleDateString(locale, {
           weekday: "short", day: "numeric", month: "short", year: "numeric",
         });
       } catch (_e) {
@@ -296,10 +329,10 @@ class DailyHadithCard extends HTMLElement {
     }
 
     const toggle =
-      c.show_toggle && c.show_translation
+      c.show_toggle && c.show_translation && tr.offered
         ? `<div class="seg" role="group" aria-label="Translation">
-             <button class="${lang === "en" ? "on" : ""}" data-lang="en" aria-pressed="${lang === "en"}">EN</button>
-             <button class="${lang === "ms" ? "on" : ""}" data-lang="ms" aria-pressed="${lang === "ms"}" ${hasMs ? "" : `disabled title="${esc(t.no_ms)}"`}>BM</button>
+             <button class="${showTr ? "" : "on"}" data-lang="en" aria-pressed="${!showTr}">EN</button>
+             <button class="${showTr ? "on" : ""}" data-lang="tr" aria-pressed="${showTr}" ${tr.has ? "" : `disabled title="${esc(UI[uiLang(this._hass)].no_tr)}"`}>${esc(tr.label)}</button>
            </div>`
         : "";
 
@@ -317,7 +350,11 @@ class DailyHadithCard extends HTMLElement {
     const arabic = c.show_arabic && a.arabic ? `<div class="ar" dir="rtl" lang="ar">${esc(tidy(a.arabic))}</div>` : "";
     const trans =
       c.show_translation && translation
-        ? `<div class="tr" lang="${lang}">${translationHtml(translation)}</div>`
+        ? `<div class="tr" lang="${esc(lang)}" dir="${showTr && RTL.has(tr.base) ? "rtl" : "auto"}">${translationHtml(translation)}</div>`
+        : "";
+    const aiNote =
+      c.show_translation && showTr && c.show_ai_note !== false && tr.source
+        ? `<div class="ai">${esc(t.ai)}</div>`
         : "";
     const divider = arabic && trans ? `<div class="div"></div>` : "";
 
@@ -340,6 +377,7 @@ class DailyHadithCard extends HTMLElement {
       ${header}
       <div class="body ${c.collapse && !this._expanded ? "clamped" : ""}">${arabic}${divider}${trans}</div>
       <button class="more" hidden>${svg(ICONS.chevron)}<span></span></button>
+      ${aiNote}
       ${footer}
     `);
 
@@ -413,6 +451,7 @@ const STYLE = `
   .div { height:1px; background:var(--dh-line); margin:12px 0; }
   .tr { font-size:.95rem; line-height:1.65; color:var(--primary-text-color); white-space:pre-line; }
   .narr { color:var(--dh-muted); font-weight:600; }
+  .ai { margin-top:8px; font-size:.72rem; color:var(--dh-muted); letter-spacing:.2px; }
   .saw { font-family:"Daily Hadith Amiri","Amiri","Noto Naskh Arabic",serif; font-size:1.15em; }
   .more { all:unset; cursor:pointer; display:inline-flex; align-items:center; gap:2px; margin-top:6px;
     font-size:.85rem; font-weight:500; color:var(--dh-accent); }
@@ -436,13 +475,14 @@ const STYLE = `
 const EDITOR_LABELS = {
   en: {
     entity: "Hadith sensor",
-    language: "Starting translation",
+    language: "Starting language",
     auto: "Follow Home Assistant language",
     en: "English",
-    ms: "Bahasa Melayu",
+    translation: "Translation (set in the integration options)",
     show_arabic: "Show Arabic",
     show_translation: "Show translation",
-    show_toggle: "Show EN / BM switch",
+    show_toggle: "Show language switch",
+    show_ai_note: "Show \"AI translation\" note",
     show_header: "Show header",
     show_reference: "Show reference link",
     show_refresh: "Show refresh button",
@@ -451,13 +491,14 @@ const EDITOR_LABELS = {
   },
   ms: {
     entity: "Sensor hadis",
-    language: "Terjemahan permulaan",
+    language: "Bahasa permulaan",
     auto: "Ikut bahasa Home Assistant",
     en: "English",
-    ms: "Bahasa Melayu",
+    translation: "Terjemahan (ditetapkan dalam pilihan integrasi)",
     show_arabic: "Papar teks Arab",
     show_translation: "Papar terjemahan",
-    show_toggle: "Papar suis EN / BM",
+    show_toggle: "Papar suis bahasa",
+    show_ai_note: "Papar nota \"Terjemahan AI\"",
     show_header: "Papar tajuk",
     show_reference: "Papar pautan rujukan",
     show_refresh: "Papar butang muat semula",
@@ -489,7 +530,7 @@ class DailyHadithCardEditor extends HTMLElement {
             options: [
               { value: "auto", label: L.auto },
               { value: "en", label: L.en },
-              { value: "ms", label: L.ms },
+              { value: "translation", label: L.translation },
             ],
           },
         },
@@ -499,7 +540,7 @@ class DailyHadithCardEditor extends HTMLElement {
         name: "",
         schema: [
           "show_arabic", "show_translation", "show_toggle", "show_header",
-          "show_reference", "show_refresh", "show_copy", "collapse",
+          "show_reference", "show_refresh", "show_copy", "show_ai_note", "collapse",
         ].map((name) => ({ name, selector: { boolean: {} } })),
       },
     ];
@@ -521,8 +562,10 @@ class DailyHadithCardEditor extends HTMLElement {
     this._form.schema = this._schema(L);
     this._form.data = {
       entity: DEFAULT_ENTITY, language: "auto", show_arabic: true, show_translation: true, show_toggle: true,
-      show_header: true, show_reference: true, show_refresh: true, show_copy: true, collapse: true,
+      show_header: true, show_reference: true, show_refresh: true, show_copy: true, show_ai_note: true,
+      collapse: true,
       ...this._config,
+      language: this._config.language === "ms" ? "translation" : this._config.language || "auto",
     };
   }
 }
@@ -535,7 +578,7 @@ if (!window.customCards.some((c) => c.type === CARD_TAG)) {
   window.customCards.push({
     type: CARD_TAG,
     name: "Daily Hadith",
-    description: "Hadith of the day in Arabic with an English / Bahasa Melayu translation.",
+    description: "Hadith of the day in Arabic with English and a translation in your language.",
     preview: true,
     documentationURL: "https://github.com/zubir2k/homeassistant-dailyhadith",
   });

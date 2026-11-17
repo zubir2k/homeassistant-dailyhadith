@@ -29,6 +29,7 @@ from custom_components.daily_hadith.const import (
 )
 from custom_components.daily_hadith.diagnostics import async_get_config_entry_diagnostics
 from custom_components.daily_hadith.sensor import clean_text
+from custom_components.daily_hadith.translator import TranslationError
 
 PAYLOAD = json.loads((Path(__file__).parents[1] / "dailyhadith.json").read_text())
 
@@ -39,11 +40,19 @@ def _other(num: str) -> dict:
     return p
 
 
+OPENAI_MS = {
+    "language": "ms",
+    "translator": "openai",
+    "base_url": "http://ollama.local:11434/v1",
+    "model": "llama3.1",
+}
+
+
 @pytest.fixture(autouse=True)
 def mock_translate():
-    """Never reach the real translation worker; return a fixed Malay string."""
+    """Never reach a real AI; return a fixed Malay string."""
     with patch(
-        "custom_components.daily_hadith.coordinator.DailyHadithCoordinator._async_translate",
+        "custom_components.daily_hadith.coordinator.async_translate",
         return_value="Terjemahan Melayu",
     ) as mock:
         yield mock
@@ -54,8 +63,10 @@ async def tz(hass: HomeAssistant):
     await hass.config.async_set_time_zone("Asia/Kuala_Lumpur")
 
 
-async def _setup(hass, data=None):
-    entry = MockConfigEntry(domain=DOMAIN, data=data or {}, title="Daily Hadith")
+async def _setup(hass, data=None, options=None):
+    entry = MockConfigEntry(
+        domain=DOMAIN, data=data or {}, options=options or {}, title="Daily Hadith"
+    )
     entry.add_to_hass(hass)
     await hass.config_entries.async_setup(entry.entry_id)
     await hass.async_block_till_done()
@@ -212,7 +223,8 @@ async def test_malay_from_fallback_feed(hass: HomeAssistant, aioclient_mock, moc
 
 async def test_malay_translated_for_api(hass: HomeAssistant, aioclient_mock, mock_translate) -> None:
     aioclient_mock.get(API_ENDPOINT_HADITH_RANDOM, json=_other("9"))
-    await _setup(hass, {CONF_API_KEY: "k"})
+    await _setup(hass, {CONF_API_KEY: "k"}, OPENAI_MS)
+    await hass.async_block_till_done(wait_background_tasks=True)
     attrs = hass.states.get("sensor.daily_hadith").attributes
     assert attrs["malay"] == "Terjemahan Melayu"
     assert attrs["title_ms"] == "Terjemahan Melayu"
@@ -220,9 +232,10 @@ async def test_malay_translated_for_api(hass: HomeAssistant, aioclient_mock, moc
 
 
 async def test_translation_failure_not_fatal(hass: HomeAssistant, aioclient_mock, mock_translate) -> None:
-    mock_translate.return_value = ""
+    mock_translate.side_effect = TranslationError("boom")
     aioclient_mock.get(API_ENDPOINT_HADITH_RANDOM, json=_other("9"))
-    await _setup(hass, {CONF_API_KEY: "k"})
+    await _setup(hass, {CONF_API_KEY: "k"}, OPENAI_MS)
+    await hass.async_block_till_done(wait_background_tasks=True)
     attrs = hass.states.get("sensor.daily_hadith").attributes
     assert attrs["hadith_number"] == "9"
     assert attrs["malay"] == ""

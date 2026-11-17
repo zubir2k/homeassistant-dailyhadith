@@ -31,6 +31,69 @@
       "reconfigure_successful": "Kekunci API dikemas kini."
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Terjemahan",
+        "description": "Pilih bahasa terjemahan yang dipaparkan di bawah teks Arab. Bahasa Inggeris tidak memerlukan apa-apa, dan Bahasa Melayu disediakan percuma daripada suapan kongsi jika tiada kekunci API Sunnah.com. Bahasa lain (atau Bahasa Melayu dengan kekunci API) diterjemah oleh AI anda sendiri.",
+        "data": {
+          "language": "Bahasa",
+          "translator": "Penterjemah"
+        },
+        "data_description": {
+          "language": "Dipaparkan sebagai butang kedua pada kad. Tiada dalam senarai? Taip kod bahasanya (contohnya ms, id atau pt-BR).",
+          "translator": "AI yang menterjemah hadis. Setiap hadis diterjemah sekali dan disimpan untuk hari itu."
+        }
+      },
+      "ai_task": {
+        "title": "Home Assistant AI Task / Assist",
+        "description": "Menggunakan AI yang telah anda sediakan dalam Home Assistant (AI Task atau Assist dengan OpenAI, Anthropic, Google Gemini, Ollama dan lain-lain). Satu terjemahan ujian ringkas dijalankan apabila anda hantar.",
+        "data": {
+          "ai_task_entity": "Entiti AI Task atau Assist"
+        },
+        "data_description": {
+          "ai_task_entity": "Biarkan kosong untuk menggunakan ejen AI Task atau Assist lalai anda."
+        }
+      },
+      "openai": {
+        "title": "API serasi OpenAI",
+        "description": "Mana-mana perkhidmatan yang menggunakan format chat completions OpenAI: OpenAI, Ollama, OpenRouter, Groq, LM Studio, Cloudflare Workers AI dan lain-lain. Satu terjemahan ujian ringkas dijalankan apabila anda hantar.",
+        "data": {
+          "base_url": "URL asas",
+          "api_key": "Kekunci API",
+          "model": "Model"
+        },
+        "data_description": {
+          "base_url": "Contohnya https://api.openai.com/v1 atau http://192.168.1.10:11434 untuk Ollama.",
+          "api_key": "Biarkan kosong jika pelayan anda tidak memerlukannya (seperti Ollama tempatan).",
+          "model": "Contohnya gpt-4o-mini, llama3.1 atau @cf/google/gemma-4-26b-a4b-it."
+        }
+      }
+    },
+    "error": {
+      "translator_required": "Bahasa ini memerlukan penterjemah AI. Pilih AI Task / Assist atau API serasi OpenAI.",
+      "translator_required_api": "Dengan kekunci API Sunnah.com, hadis tidak datang daripada suapan kongsi, jadi Bahasa Melayu juga memerlukan penterjemah AI.",
+      "ai_task_unavailable": "AI Task mahupun Assist tidak tersedia. Tambah integrasi AI dalam Home Assistant dahulu.",
+      "translation_failed": "Terjemahan ujian gagal. Semak tetapan dan log.",
+      "invalid_auth": "Kekunci API ditolak.",
+      "invalid_url": "Masukkan URL yang bermula dengan http:// atau https://."
+    }
+  },
+  "selector": {
+    "translator": {
+      "options": {
+        "none": "Tiada",
+        "ai_task": "Home Assistant AI Task / Assist",
+        "openai": "API serasi OpenAI"
+      }
+    }
+  },
+  "issues": {
+    "translator_needed": {
+      "title": "Daily Hadith memerlukan penterjemah",
+      "description": "Bahasa terjemahan ditetapkan kepada {language}, tetapi tiada penterjemah AI tersedia, jadi hanya Bahasa Inggeris dipaparkan. Pergi ke **Tetapan → Peranti & perkhidmatan → Daily Hadith → Konfigurasi** dan pilih Home Assistant AI Task / Assist atau API serasi OpenAI, atau pilih Bahasa Inggeris."
+    }
+  },
   "entity": {
     "sensor": {
       "hadith": {
@@ -50,6 +113,23 @@
           },
           "malay": {
             "name": "Bahasa Melayu"
+          },
+          "translation": {
+            "name": "Terjemahan"
+          },
+          "title_translation": {
+            "name": "Tajuk (terjemahan)"
+          },
+          "translation_language": {
+            "name": "Bahasa terjemahan"
+          },
+          "translation_source": {
+            "name": "Diterjemah oleh",
+            "state": {
+              "feed": "Suapan hadis hari ini",
+              "ai_task": "Home Assistant AI Task / Assist",
+              "openai": "API serasi OpenAI"
+            }
           },
           "collection": {
             "name": "Kitab"
@@ -77,6 +157,50 @@
             }
           }
         }
+      },
+      "translation": {
+        "name": "Terjemahan",
+        "state": {
+          "not_needed": "Tidak diperlukan",
+          "translating": "Sedang diterjemah",
+          "translated": "Diterjemah",
+          "failed": "Gagal",
+          "needs_translator": "Perlukan penterjemah"
+        },
+        "state_attributes": {
+          "language": {
+            "name": "Bahasa"
+          },
+          "translator": {
+            "name": "Penterjemah",
+            "state": {
+              "none": "Tiada",
+              "ai_task": "Home Assistant AI Task / Assist",
+              "openai": "API serasi OpenAI"
+            }
+          },
+          "backend": {
+            "name": "Model atau entiti"
+          },
+          "hadith_number": {
+            "name": "Nombor hadis"
+          },
+          "last_attempt": {
+            "name": "Cubaan terakhir"
+          },
+          "last_success": {
+            "name": "Kejayaan terakhir"
+          },
+          "duration_seconds": {
+            "name": "Tempoh (s)"
+          },
+          "next_retry": {
+            "name": "Cubaan semula seterusnya"
+          },
+          "error": {
+            "name": "Ralat"
+          }
+        }
       }
     }
   },
@@ -92,10 +216,10 @@
   },
   "exceptions": {
     "cannot_fetch": {
-      "message": "Tidak dapat memuat turun hadis: {error}"
+      "message": "Tidak dapat mengambil hadis: {error}"
     },
     "refresh_failed": {
-      "message": "Gagal mengemas kini Hadis Harian: {error}"
+      "message": "Gagal menyegarkan Hadis Harian: {error}"
     }
   }
 }

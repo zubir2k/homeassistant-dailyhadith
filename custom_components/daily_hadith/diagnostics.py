@@ -26,6 +26,9 @@ async def async_get_config_entry_diagnostics(
         "coordinator": {
             "has_api_key": bool(coordinator.api_key),
             "is_current": coordinator.is_current(),
+            "language": coordinator.language,
+            "translation_status": coordinator.translation_status,
+            "translation_error": coordinator.translation_error,
             "hadith": async_redact_data(dict(coordinator.hadith), TO_REDACT),
         },
     }

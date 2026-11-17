@@ -31,6 +31,69 @@
       "reconfigure_successful": "API key updated."
     }
   },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Translation",
+        "description": "Choose the language for the translation shown under the Arabic. English needs nothing extra, and Malay is free from the shared feed when you have no Sunnah.com API key. Any other language (or Malay with an API key) is translated by your own AI.",
+        "data": {
+          "language": "Language",
+          "translator": "Translator"
+        },
+        "data_description": {
+          "language": "Shown as the second button on the card. Not in the list? Type its language code (for example ms, id or pt-BR).",
+          "translator": "Which AI translates the hadith. Each hadith is translated once and kept for the day."
+        }
+      },
+      "ai_task": {
+        "title": "Home Assistant AI Task / Assist",
+        "description": "Uses an AI you already set up in Home Assistant (AI Task or Assist with OpenAI, Anthropic, Google Gemini, Ollama, and others). A short test translation runs when you submit.",
+        "data": {
+          "ai_task_entity": "AI Task or Assist entity"
+        },
+        "data_description": {
+          "ai_task_entity": "Leave empty to use your default AI Task or Assist agent."
+        }
+      },
+      "openai": {
+        "title": "OpenAI-compatible API",
+        "description": "Any service that speaks the OpenAI chat completions format: OpenAI, Ollama, OpenRouter, Groq, LM Studio, Cloudflare Workers AI and more. A short test translation runs when you submit.",
+        "data": {
+          "base_url": "Base URL",
+          "api_key": "API key",
+          "model": "Model"
+        },
+        "data_description": {
+          "base_url": "For example https://api.openai.com/v1 or http://192.168.1.10:11434 for Ollama.",
+          "api_key": "Leave empty if your server needs none (such as a local Ollama).",
+          "model": "For example gpt-4o-mini, llama3.1 or @cf/google/gemma-4-26b-a4b-it."
+        }
+      }
+    },
+    "error": {
+      "translator_required": "This language needs an AI translator. Choose AI Task / Assist or an OpenAI-compatible API.",
+      "translator_required_api": "With a Sunnah.com API key the hadith is not from the shared feed, so Malay needs an AI translator too.",
+      "ai_task_unavailable": "Neither AI Task nor Assist is available. Add an AI integration in Home Assistant first.",
+      "translation_failed": "The test translation failed. Check the settings and the logs.",
+      "invalid_auth": "The API key was rejected.",
+      "invalid_url": "Enter a URL starting with http:// or https://."
+    }
+  },
+  "selector": {
+    "translator": {
+      "options": {
+        "none": "None",
+        "ai_task": "Home Assistant AI Task / Assist",
+        "openai": "OpenAI-compatible API"
+      }
+    }
+  },
+  "issues": {
+    "translator_needed": {
+      "title": "Daily Hadith needs a translator",
+      "description": "The translation language is set to {language}, but no AI translator is available, so only English is shown. Go to **Settings → Devices & services → Daily Hadith → Configure** and choose Home Assistant AI Task / Assist or an OpenAI-compatible API, or pick English."
+    }
+  },
   "entity": {
     "sensor": {
       "hadith": {
@@ -50,6 +113,23 @@
           },
           "malay": {
             "name": "Malay"
+          },
+          "translation": {
+            "name": "Translation"
+          },
+          "title_translation": {
+            "name": "Title (translation)"
+          },
+          "translation_language": {
+            "name": "Translation language"
+          },
+          "translation_source": {
+            "name": "Translated by",
+            "state": {
+              "feed": "Hadith of the day feed",
+              "ai_task": "Home Assistant AI Task / Assist",
+              "openai": "OpenAI-compatible API"
+            }
           },
           "collection": {
             "name": "Collection"
@@ -75,6 +155,50 @@
               "sunnah_api": "Sunnah.com API",
               "github_fallback": "Hadith of the day feed"
             }
+          }
+        }
+      },
+      "translation": {
+        "name": "Translation",
+        "state": {
+          "not_needed": "Not needed",
+          "translating": "Translating",
+          "translated": "Translated",
+          "failed": "Failed",
+          "needs_translator": "Needs a translator"
+        },
+        "state_attributes": {
+          "language": {
+            "name": "Language"
+          },
+          "translator": {
+            "name": "Translator",
+            "state": {
+              "none": "None",
+              "ai_task": "Home Assistant AI Task / Assist",
+              "openai": "OpenAI-compatible API"
+            }
+          },
+          "backend": {
+            "name": "Model or entity"
+          },
+          "hadith_number": {
+            "name": "Hadith number"
+          },
+          "last_attempt": {
+            "name": "Last attempt"
+          },
+          "last_success": {
+            "name": "Last success"
+          },
+          "duration_seconds": {
+            "name": "Duration (s)"
+          },
+          "next_retry": {
+            "name": "Next retry"
+          },
+          "error": {
+            "name": "Error"
           }
         }
       }

@@ -1,3 +1,22 @@
+# Daily Hadith v1.3.0
+
+## New
+- **Translate into any language with your own AI**:
+  - **Home Assistant AI Task / Assist**: use any AI agent configured in Home Assistant (ChatGPT, Claude, Google Gemini, Ollama, local LLMs).
+  - **OpenAI-compatible API**: connect directly to OpenAI, Ollama, OpenRouter, Groq, LM Studio, Cloudflare Workers AI, etc.
+  - Eliminates external third-party translator worker dependencies.
+- **Both modes fully supported**:
+  - **Without API key (Shared Feed)**: English and Arabic, plus free Malay without any AI setup required. Selecting any other language translates using your AI.
+  - **With API key (Sunnah.com API)**: Random hadith with English and Arabic, translated into your chosen language (Malay, Indonesian, French, etc.) via your configured AI.
+- **Lovelace Card v1.3.0**:
+  - Dynamic language toggle (EN / your translated language code e.g. BM, ID, TR).
+  - RTL support for Arabic, Urdu, Persian, and other RTL languages.
+  - Optional small "AI translation" indicator note.
+- **Diagnostics & Status Sensor**:
+  - New diagnostic entity `sensor.daily_hadith_translation` reporting status (`not_needed`, `translating`, `translated`, `failed`, `needs_translator`) and timing/retry attributes.
+  - Automatic non-blocking background translation so English is displayed immediately while translation runs.
+  - Automatic 15-minute retry on temporary AI provider timeouts or network issues.
+
 # Daily Hadith v1.2.0
 
 ## New
