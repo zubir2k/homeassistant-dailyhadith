@@ -64,7 +64,7 @@
           "model": "Model"
         },
         "data_description": {
-          "base_url": "For example https://api.openai.com/v1 or http://192.168.1.10:11434 for Ollama.",
+          "base_url": "For example api.openai.com/v1 or 192.168.1.10:11434 for Ollama.",
           "api_key": "Leave empty if your server needs none (such as a local Ollama).",
           "model": "For example gpt-4o-mini, llama3.1 or @cf/google/gemma-4-26b-a4b-it."
         }

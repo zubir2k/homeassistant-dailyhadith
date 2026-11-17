@@ -64,7 +64,7 @@
           "model": "Model"
         },
         "data_description": {
-          "base_url": "Contohnya https://api.openai.com/v1 atau http://192.168.1.10:11434 untuk Ollama.",
+          "base_url": "Contohnya api.openai.com/v1 atau 192.168.1.10:11434 untuk Ollama.",
           "api_key": "Biarkan kosong jika pelayan anda tidak memerlukannya (seperti Ollama tempatan).",
           "model": "Contohnya gpt-4o-mini, llama3.1 atau @cf/google/gemma-4-26b-a4b-it."
         }

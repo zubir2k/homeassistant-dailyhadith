@@ -12,31 +12,7 @@ Assalamu'alaikum
 This is a custom integration on Daily Hadith from Sunnah.com for your Home Assistant 🏠 \
 _May this benefit you, inshaAllah._
 
-## 🛠️ What's New in 1.3.0
-
-- **Translate into your own language** with your own AI: Home Assistant **AI Task / Assist** (ChatGPT, Claude, Google Gemini, Ollama…) or any **OpenAI-compatible API** (OpenAI, Ollama, OpenRouter, Groq, LM Studio, Cloudflare Workers AI…). See [Translation](#-translation).
-- Bahasa Melayu stays free and needs no setup when you use the shared feed (no API key).
-- The card's switch now shows your language (EN / BM / ID / TR…), and the heading, chapter title and date follow the language you pick.
-- New attributes: `translation`, `title_translation`, `translation_language`, `translation_source`.
-- New diagnostic sensor `sensor.daily_hadith_translation`: translation status (not needed, translating, translated, failed, needs a translator), with the last error, duration and next retry in its attributes.
-- API-key users: Malay now comes from your own translator (eliminating any external Cloudflare Worker reliance). If none is set, Home Assistant shows a repair notice and the card stays in English.
-
-## 🛠️ What's New in 1.2.0
-
-- Bundled **Daily Hadith card** with an EN / BM switch (see below).
-- Malay translation (`malay`, `title_ms`) for API-key users too.
-
-## 🛠️ What's New in 1.1.0 (ready for Home Assistant 2026.11)
-
-- Fixed loading on current Home Assistant: the `async_timeout` package is no longer shipped with HA.
-- The hadith now changes at midnight in **your Home Assistant time zone**, and catches up after a restart if HA was off at midnight.
-- If the Sunnah.com API is down, the integration falls back to the shared hadith of the day instead of going unavailable.
-- Add, change or remove your API key any time: **Settings → Devices & services → Daily Hadith → ⋮ → Reconfigure**.
-- New attributes: `url` (link to the hadith on Sunnah.com) and `source`.
-- Daily Hadith now shows as a service device, with English and Malay translations for the setup, sensor and action.
-- New `malay` and `title_ms` attributes (Bahasa Melayu), translated cleanly via your configured AI translator.
-- Long `text`, `arabic` and `malay` attributes are no longer stored in the recorder database.
-- Your existing `sensor.daily_hadith` entity and automations keep working. Minimum Home Assistant version is now 2024.11.
+See [RELEASE_NOTES.md](RELEASE_NOTES.md) for full version history and release notes.
 
 ## 🚩 Features
 - Daily random hadith which refreshes at midnight (your Home Assistant time zone).
@@ -86,7 +62,7 @@ Arabic and English are always included. For a third language, open **Settings �
 
 1. **Language**: the language shown on the card's second button. Bahasa Melayu is the default. Not in the list? Type its code (for example `pt-BR`).
 2. **Translator**:
-   - **None**: English only, or Malay from the shared feed (when using without a Sunnah.com API key).
+   - **None**: Arabic and English only (no translation).
    - **Home Assistant AI Task / Assist**: uses an AI integration you already have (OpenAI, Anthropic, Google Gemini, Ollama and others). Leave the entity empty to use your default AI Task or Assist agent.
    - **OpenAI-compatible API**: a base URL, an optional API key and a model.
 
