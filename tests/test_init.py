@@ -112,7 +112,7 @@ async def test_not_ready_when_everything_fails(hass: HomeAssistant, aioclient_mo
 async def test_cache_used_and_stale_cache_refreshed(hass: HomeAssistant, aioclient_mock, hass_storage) -> None:
     today = dt_util.now().date().isoformat()
     hass_storage[STORAGE_KEY] = {"version": 1, "key": STORAGE_KEY, "data": {"data": [
-        {"hadithNumber": "5", "collection": "bukhari", "fetch_date": today, "malayText": ""}]}}
+        {"hadithNumber": "5", "collection": "bukhari", "fetch_date": today}]}}
     aioclient_mock.get(FALLBACK_URL, text=json.dumps(PAYLOAD))
     await _setup(hass)
     assert hass.states.get("sensor.daily_hadith").attributes["hadith_number"] == "5"
@@ -210,14 +210,14 @@ def test_clean_text() -> None:
     assert clean_text(None) == ""
 
 
-async def test_malay_from_fallback_feed(hass: HomeAssistant, aioclient_mock, mock_translate) -> None:
+async def test_fallback_feed_ignores_feed_malay(hass: HomeAssistant, aioclient_mock, mock_translate) -> None:
     payload = json.loads(json.dumps(PAYLOAD))
     payload["hadith"].append({"lang": "ms", "chapterTitle": "Tajuk", "body": "<p>Teks BM</p>"})
     aioclient_mock.get(FALLBACK_URL, text=json.dumps(payload))
     await _setup(hass)
     attrs = hass.states.get("sensor.daily_hadith").attributes
-    assert attrs["malay"] == "Teks BM"
-    assert attrs["title_ms"] == "Tajuk"
+    assert attrs["malay"] == ""
+    assert attrs["translation"] == ""
     mock_translate.assert_not_called()
 
 
@@ -241,14 +241,14 @@ async def test_translation_failure_not_fatal(hass: HomeAssistant, aioclient_mock
     assert attrs["malay"] == ""
 
 
-async def test_old_cache_without_malay_refetched(hass: HomeAssistant, aioclient_mock, hass_storage) -> None:
+async def test_today_cache_kept_without_malay_key(hass: HomeAssistant, aioclient_mock, hass_storage) -> None:
     today = dt_util.now().date().isoformat()
     hass_storage[STORAGE_KEY] = {"version": 1, "key": STORAGE_KEY, "data": {"data": [
         {"hadithNumber": "5", "collection": "bukhari", "fetch_date": today}]}}
     aioclient_mock.get(FALLBACK_URL, text=json.dumps(PAYLOAD))
     await _setup(hass)
-    await hass.async_block_till_done(wait_background_tasks=True)
-    assert aioclient_mock.call_count == 1
+    assert hass.states.get("sensor.daily_hadith").attributes["hadith_number"] == "5"
+    assert aioclient_mock.call_count == 0
 
 
 async def test_refresh_service_forces_fetch(hass: HomeAssistant, aioclient_mock) -> None:

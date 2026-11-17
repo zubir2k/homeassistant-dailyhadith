@@ -151,11 +151,7 @@ class DailyHadithOptionsFlow(OptionsFlow):
 
     def _needs_ai(self, language: str) -> bool:
         """Return True when this language can only come from an AI translator."""
-        base = base_language(language)
-        if base in NO_TRANSLATION:
-            return False
-        # Malay is in the shared feed, which is only used without an API key.
-        return not (base == "ms" and not self.config_entry.data.get(CONF_API_KEY))
+        return base_language(language) not in NO_TRANSLATION
 
     async def async_step_init(
         self, user_input: dict[str, Any] | None = None
@@ -167,11 +163,7 @@ class DailyHadithOptionsFlow(OptionsFlow):
             language = user_input[CONF_LANGUAGE].strip()
             translator = user_input[CONF_TRANSLATOR]
             if translator == TRANSLATOR_NONE and self._needs_ai(language):
-                errors["base"] = (
-                    "translator_required_api"
-                    if base_language(language) == "ms"
-                    else "translator_required"
-                )
+                errors["base"] = "translator_required"
             else:
                 self._choice = {CONF_LANGUAGE: language, CONF_TRANSLATOR: translator}
                 if translator == TRANSLATOR_AI_TASK:

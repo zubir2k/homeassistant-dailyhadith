@@ -1,3 +1,13 @@
+# Daily Hadith v1.3.1
+
+## Changes & Cleanups
+- **Streamlined Data Architecture**:
+  - Sunnah.com raw output (`ar` + `en`) is now used exclusively across both API mode and Fallback feed mode.
+  - The fallback feed's legacy `ms` entry is ignored; all non-English/Arabic translations (including Malay) are cleanly and reliably handled by your configured Home Assistant AI Task / Assist or OpenAI-compatible API.
+  - Completely eliminates dependence on the external Cloudflare Worker `hadith-translator.zubir-jamal.workers.dev`.
+  - Clarified options dialog text and validations to show that Sunnah.com provides Arabic & English, while any other language (including Malay) is translated by your AI.
+- **Card v1.3.1**: Bumped version and streamlined translation source detection.
+
 # Daily Hadith v1.3.0
 
 ## New

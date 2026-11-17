@@ -64,19 +64,20 @@ async def test_ai_language_in_normal_mode(hass: HomeAssistant, aioclient_mock) -
     assert a["title_translation"] == "Judul"
     assert a["translation_language"] == "id"
     assert a["translation_source"] == "openai"
-    assert a["malay"] == "Teks BM"  # the free Malay stays available
+    assert a["malay"] == ""
     assert mock.call_count == 2
     assert mock.call_args_list[0].args[3] == "id"
 
 
-async def test_malay_from_feed_needs_no_ai(hass: HomeAssistant, aioclient_mock) -> None:
+async def test_malay_uses_ai_in_normal_mode(hass: HomeAssistant, aioclient_mock) -> None:
     aioclient_mock.get(FALLBACK_URL, text=_feed_with_ms())
-    with patch(PATCH) as mock:
+    with patch(PATCH, side_effect=["Teks BM Diterjemah", "Tajuk BM"]) as mock:
         await _setup(hass, options={"language": "ms", "translator": "openai", **OLLAMA})
     a = hass.states.get("sensor.daily_hadith").attributes
-    assert a["translation"] == "Teks BM"
-    assert a["translation_source"] == "feed"
-    mock.assert_not_called()
+    assert a["translation"] == "Teks BM Diterjemah"
+    assert a["malay"] == "Teks BM Diterjemah"
+    assert a["translation_source"] == "openai"
+    assert mock.call_count == 2
 
 
 async def test_english_means_no_translation(hass: HomeAssistant, aioclient_mock) -> None:
@@ -157,18 +158,22 @@ async def _options(hass, data=None):
     return entry, r
 
 
-async def test_options_none_with_free_malay(hass: HomeAssistant) -> None:
+async def test_options_none_with_english(hass: HomeAssistant) -> None:
     entry, r = await _options(hass)
     r = await hass.config_entries.options.async_configure(
-        r["flow_id"], {"language": "ms", "translator": "none"}
+        r["flow_id"], {"language": "en", "translator": "none"}
     )
     assert r["type"] is FlowResultType.CREATE_ENTRY
-    assert entry.options == {"language": "ms", "translator": "none"}
+    assert entry.options == {"language": "en", "translator": "none"}
 
 
 @pytest.mark.parametrize(
     ("data", "language", "error"),
-    [({}, "id", "translator_required"), ({CONF_API_KEY: "k"}, "ms", "translator_required_api")],
+    [
+        ({}, "id", "translator_required"),
+        ({}, "ms", "translator_required"),
+        ({CONF_API_KEY: "k"}, "ms", "translator_required"),
+    ],
 )
 async def test_options_need_translator(hass: HomeAssistant, data, language, error) -> None:
     _, r = await _options(hass, data)
@@ -358,7 +363,7 @@ async def test_diagnostic_sensor_reports_failure(hass: HomeAssistant, aioclient_
 async def test_diagnostic_sensor_states(hass: HomeAssistant, aioclient_mock) -> None:
     aioclient_mock.get(FALLBACK_URL, text=_feed_with_ms())
     with patch(PATCH):
-        await _setup(hass, options={"language": "ms", "translator": "none"})
+        await _setup(hass, options={"language": "en", "translator": "none"})
     assert hass.states.get(DIAG).state == "not_needed"
 
 

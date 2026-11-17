@@ -60,7 +60,6 @@ def build_processed_data(source: dict[str, Any], origin: str) -> dict[str, Any]:
     hadiths = source.get("hadith") or []
     english = next((h for h in hadiths if h.get("lang") == "en"), {})
     arabic = next((h for h in hadiths if h.get("lang") == "ar"), {})
-    malay = next((h for h in hadiths if h.get("lang") == "ms"), {})
 
     return {
         "collection": source.get("collection", ""),
@@ -69,9 +68,7 @@ def build_processed_data(source: dict[str, Any], origin: str) -> dict[str, Any]:
         "hadithNumber": source.get("hadithNumber", ""),
         "text": english.get("body", ""),
         "arabicText": arabic.get("body", ""),
-        "malayText": malay.get("body", ""),
         "chapterTitle": english.get("chapterTitle", ""),
-        "chapterTitleMs": malay.get("chapterTitle", ""),
         "chapter": english.get("chapterNumber", ""),
         "fetch_date": dt_util.now().date().isoformat(),
         "source": origin,
@@ -121,16 +118,9 @@ class DailyHadithCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         return items[0]
 
     def is_current(self) -> bool:
-        """Return True when the cached hadith belongs to today (HA time zone).
-
-        A record cached by an older version has no Malay keys at all; treat it
-        as out of date so it is replaced once instead of staying untranslated.
-        """
+        """Return True when the cached hadith belongs to today (HA time zone)."""
         h = self.hadith
-        return (
-            h.get("fetch_date") == dt_util.now().date().isoformat()
-            and "malayText" in h
-        )
+        return h.get("fetch_date") == dt_util.now().date().isoformat()
 
     async def async_load_cached(self) -> bool:
         """Load the cached hadith from storage. Return True when one was found."""
@@ -196,11 +186,7 @@ class DailyHadithCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         return build_processed_data(payload, SOURCE_API)
 
     async def _fetch_fallback(self) -> dict[str, Any]:
-        """Fetch the hadith of the day from the GitHub fallback feed.
-
-        The feed is produced by dailyhadith-fetcher and already contains the
-        Malay entry, so no translation request is made from here.
-        """
+        """Fetch the hadith of the day from the GitHub fallback feed."""
         async with asyncio.timeout(API_TIMEOUT):
             async with self._session.get(FALLBACK_URL) as response:
                 if response.status != 200:
@@ -223,13 +209,6 @@ class DailyHadithCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         base = base_language(lang)
         if base in NO_TRANSLATION:
             return {}
-        if base == "ms" and record.get("malayText"):
-            return {
-                "lang": lang,
-                "text": record["malayText"],
-                "title": record.get("chapterTitleMs", ""),
-                "source": TR_SOURCE_FEED,
-            }
         return None
 
     def _needs_translation(self, record: dict[str, Any]) -> bool:

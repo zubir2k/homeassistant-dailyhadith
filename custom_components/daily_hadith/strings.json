@@ -35,7 +35,7 @@
     "step": {
       "init": {
         "title": "Translation",
-        "description": "Choose the language for the translation shown under the Arabic. English needs nothing extra, and Malay is free from the shared feed when you have no Sunnah.com API key. Any other language (or Malay with an API key) is translated by your own AI.",
+        "description": "Choose the language for the translation shown under the Arabic. English and Arabic are provided directly by Sunnah.com. Any other language (including Malay) is translated by your Home Assistant AI or an OpenAI-compatible API.",
         "data": {
           "language": "Language",
           "translator": "Translator"

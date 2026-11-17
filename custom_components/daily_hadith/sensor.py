@@ -103,11 +103,9 @@ class DailyHadithSensor(CoordinatorEntity[DailyHadithCoordinator], SensorEntity)
         tr_lang = tr.get("lang") if tr_text else None
         language = self.coordinator.language
         current = bool(tr_text) and tr_lang == language
-        malay = clean_text(h.get("malayText"))
-        title_ms = h.get("chapterTitleMs", "")
-        if not malay and tr_text and base_language(tr_lang) == "ms":
-            # API users get Malay from their own translator.
-            malay, title_ms = tr_text, tr.get("title", "")
+        is_ms = current and base_language(tr_lang) == "ms"
+        malay = tr_text if is_ms else ""
+        title_ms = tr.get("title", "") if is_ms else ""
         return {
             "title": h.get("chapterTitle", ""),
             "title_ms": title_ms,

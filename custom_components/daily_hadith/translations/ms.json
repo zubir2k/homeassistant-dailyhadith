@@ -35,7 +35,7 @@
     "step": {
       "init": {
         "title": "Terjemahan",
-        "description": "Pilih bahasa terjemahan yang dipaparkan di bawah teks Arab. Bahasa Inggeris tidak memerlukan apa-apa, dan Bahasa Melayu disediakan percuma daripada suapan kongsi jika tiada kekunci API Sunnah.com. Bahasa lain (atau Bahasa Melayu dengan kekunci API) diterjemah oleh AI anda sendiri.",
+        "description": "Pilih bahasa terjemahan yang dipaparkan di bawah teks Arab. Bahasa Inggeris dan Arab disediakan terus oleh Sunnah.com. Sebarang bahasa lain (termasuk Bahasa Melayu) diterjemah oleh AI Home Assistant atau API serasi OpenAI.",
         "data": {
           "language": "Bahasa",
           "translator": "Penterjemah"

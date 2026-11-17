@@ -34,7 +34,7 @@ _May this benefit you, inshaAllah._
 - Add, change or remove your API key any time: **Settings → Devices & services → Daily Hadith → ⋮ → Reconfigure**.
 - New attributes: `url` (link to the hadith on Sunnah.com) and `source`.
 - Daily Hadith now shows as a service device, with English and Malay translations for the setup, sensor and action.
-- New `malay` and `title_ms` attributes (Bahasa Melayu). The fallback feed already includes them; with an API key the integration translates through the hadith translator worker.
+- New `malay` and `title_ms` attributes (Bahasa Melayu), translated cleanly via your configured AI translator.
 - Long `text`, `arabic` and `malay` attributes are no longer stored in the recorder database.
 - Your existing `sensor.daily_hadith` entity and automations keep working. Minimum Home Assistant version is now 2024.11.
 
