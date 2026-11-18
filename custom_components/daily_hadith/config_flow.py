@@ -93,6 +93,8 @@ class DailyHadithConfigFlow(ConfigFlow, domain=DOMAIN):
         self, user_input: dict[str, Any] | None = None
     ) -> ConfigFlowResult:
         """Handle the initial step."""
+        await self.async_set_unique_id(DOMAIN)
+        self._abort_if_unique_id_configured()
         # Also enforced by "single_config_entry" in manifest.json.
         if self._async_current_entries():
             return self.async_abort(reason="single_instance_allowed")
