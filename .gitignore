@@ -4,4 +4,6 @@ __pycache__/
 .pytest_cache/
 .coverage
 htmlcov/
+.venv/
+.DS_Store
 *.zip
