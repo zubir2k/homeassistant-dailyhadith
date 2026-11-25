@@ -19,6 +19,8 @@ from homeassistant.helpers.storage import Store
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 from homeassistant.util import dt as dt_util
 
+from dailyhadith import DailyHadithClient, DailyHadithError
+
 from .const import (
     API_ENDPOINT_HADITH_RANDOM,
     API_TIMEOUT,
@@ -92,6 +94,12 @@ class DailyHadithCoordinator(DataUpdateCoordinator[dict[str, Any]]):
         )
         self.store: Store[dict[str, Any]] = Store(hass, STORAGE_VERSION, STORAGE_KEY)
         self._session = async_get_clientsession(hass)
+        self.client = DailyHadithClient(
+            api_key=self.api_key,
+            session=self._session,
+            fallback_url=FALLBACK_URL,
+            timeout=API_TIMEOUT,
+        )
         self._force_next = False
         self._translating = False
         self._pending_translation = False
@@ -139,32 +147,18 @@ class DailyHadithCoordinator(DataUpdateCoordinator[dict[str, Any]]):
             self.async_schedule_translation(record)
             return self.data
 
-        record: dict[str, Any] | None = None
-        errors: list[str] = []
-
-        if self.api_key:
-            try:
-                record = await self._fetch_api()
-            except (TimeoutError, aiohttp.ClientError, UpdateFailed, ValueError) as err:
-                errors.append(f"Sunnah.com API: {err}")
-                _LOGGER.warning(
-                    "Sunnah.com API failed (%s), using the daily fallback feed", err
-                )
-
-        if record is None:
-            try:
-                record = await self._fetch_fallback()
-            except (TimeoutError, aiohttp.ClientError, UpdateFailed, ValueError) as err:
-                errors.append(f"fallback feed: {err}")
-
-        if record is None:
-            err_msg = "; ".join(errors) if errors else "No hadith sources reachable"
+        self.client.api_key = self.api_key
+        today_iso = dt_util.now().date().isoformat()
+        try:
+            hadith = await self.client.async_get_hadith(fetch_date=today_iso)
+            record = hadith.to_dict()
+        except DailyHadithError as err:
             raise UpdateFailed(
-                f"Could not fetch a hadith: {err_msg}",
+                f"Could not fetch a hadith: {err}",
                 translation_domain=DOMAIN,
                 translation_key="cannot_fetch",
-                translation_placeholders={"error": err_msg},
-            )
+                translation_placeholders={"error": str(err)},
+            ) from err
 
         self._apply_translation(record)
         data = {"data": [record]}
@@ -174,28 +168,17 @@ class DailyHadithCoordinator(DataUpdateCoordinator[dict[str, Any]]):
 
     async def _fetch_api(self) -> dict[str, Any]:
         """Fetch a random hadith from the Sunnah.com API."""
-        async with asyncio.timeout(API_TIMEOUT):
-            async with self._session.get(
-                API_ENDPOINT_HADITH_RANDOM, headers={"x-api-key": self.api_key or ""}
-            ) as response:
-                if response.status != 200:
-                    raise UpdateFailed(f"HTTP {response.status}")
-                payload = await response.json()
-        if not isinstance(payload, dict) or not payload.get("hadith"):
-            raise UpdateFailed("unexpected response format")
-        return build_processed_data(payload, SOURCE_API)
+        hadith = await self.client.async_get_from_api(
+            fetch_date=dt_util.now().date().isoformat()
+        )
+        return hadith.to_dict()
 
     async def _fetch_fallback(self) -> dict[str, Any]:
         """Fetch the hadith of the day from the GitHub fallback feed."""
-        async with asyncio.timeout(API_TIMEOUT):
-            async with self._session.get(FALLBACK_URL) as response:
-                if response.status != 200:
-                    raise UpdateFailed(f"HTTP {response.status}")
-                # raw.githubusercontent.com serves text/plain, so skip content-type check
-                payload = await response.json(content_type=None)
-        if not isinstance(payload, dict) or not payload.get("hadith"):
-            raise UpdateFailed("unexpected response format")
-        return build_processed_data(payload, SOURCE_FALLBACK)
+        hadith = await self.client.async_get_from_fallback(
+            fetch_date=dt_util.now().date().isoformat()
+        )
+        return hadith.to_dict()
 
     # --- translation --------------------------------------------------------
     @property

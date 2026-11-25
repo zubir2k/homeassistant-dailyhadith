@@ -8,7 +8,7 @@ rules:
   config-flow-test-coverage: done
   dependency-transparency:
     status: done
-    comment: No external dependencies required.
+    comment: Uses python-dailyhadith package for fetching and parsing hadiths.
   docs-actions: done
   docs-conditions:
     status: exempt

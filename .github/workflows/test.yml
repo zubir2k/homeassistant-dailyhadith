@@ -16,4 +16,4 @@ jobs:
       - name: Set up Python
         run: uv python install 3.12
       - name: Run pytest
-        run: uv run --with pytest --with pytest-homeassistant-custom-component --with home-assistant-frontend pytest
+        run: uv run --with pytest --with pytest-homeassistant-custom-component --with home-assistant-frontend --with python-dailyhadith pytest
