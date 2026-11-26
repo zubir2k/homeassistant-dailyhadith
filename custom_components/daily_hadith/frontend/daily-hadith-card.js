@@ -28,7 +28,7 @@ const TR_LINES = 6;
 /* Bundled Amiri (SIL OFL) for the Arabic text. @font-face does not register from
    inside a shadow root, so it goes into document.head once. The browser only downloads
    it when Arabic glyphs are drawn, and falls back to system Arabic fonts without it. */
-const FONT_URL = "/daily_hadith_static/fonts/Amiri-Regular.woff2";
+const FONT_URL = new URL("./fonts/Amiri-Regular.woff2", import.meta.url).href;
 (function injectFont() {
   if (document.getElementById("daily-hadith-fonts")) return;
   const st = document.createElement("style");
