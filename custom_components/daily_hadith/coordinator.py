@@ -8,7 +8,6 @@ import time
 from datetime import datetime, timedelta
 from typing import Any
 
-import aiohttp
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.const import CONF_API_KEY
 from homeassistant.core import CALLBACK_TYPE, HomeAssistant, callback
@@ -22,7 +21,6 @@ from homeassistant.util import dt as dt_util
 from dailyhadith import DailyHadithClient, DailyHadithError
 
 from .const import (
-    API_ENDPOINT_HADITH_RANDOM,
     API_TIMEOUT,
     CONF_LANGUAGE,
     CONF_TRANSLATOR,
@@ -30,11 +28,8 @@ from .const import (
     DOMAIN,
     FALLBACK_URL,
     ISSUE_TRANSLATOR_NEEDED,
-    SOURCE_API,
-    SOURCE_FALLBACK,
     STORAGE_KEY,
     STORAGE_VERSION,
-    TR_SOURCE_FEED,
     TR_STATUS_FAILED,
     TR_STATUS_NEEDS_TRANSLATOR,
     TR_STATUS_NOT_NEEDED,

@@ -4,14 +4,6 @@ from __future__ import annotations
 
 from typing import Final
 
-from dailyhadith import (
-    API_BASE_URL,
-    API_ENDPOINT_RANDOM as API_ENDPOINT_HADITH_RANDOM,
-    DEFAULT_FALLBACK_URL as FALLBACK_URL,
-    DEFAULT_TIMEOUT as API_TIMEOUT,
-    SOURCE_API,
-    SOURCE_FALLBACK,
-)
 
 DOMAIN: Final = "daily_hadith"
 STORAGE_VERSION: Final = 1

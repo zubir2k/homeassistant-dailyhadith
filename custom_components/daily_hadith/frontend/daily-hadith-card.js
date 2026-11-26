@@ -17,7 +17,7 @@
  *   collapse: true                   # fold long hadith behind "Show more"
  */
 
-const CARD_VERSION = "1.3.1";
+const CARD_VERSION = "1.3.3";
 const CARD_TAG = "daily-hadith-card";
 const EDITOR_TAG = "daily-hadith-card-editor";
 const DEFAULT_ENTITY = "sensor.daily_hadith";
